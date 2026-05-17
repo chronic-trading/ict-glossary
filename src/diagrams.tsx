@@ -1914,6 +1914,35 @@ export function POIDiagram() {
   )
 }
 
+export function CISDDiagram() {
+  return (
+    <Base>
+      {/* Bearish candles leading into sweep */}
+      <Candle x={14}  y={42} h={16} bull={false} wickT={3} wickB={3}/>
+      <Candle x={34}  y={54} h={18} bull={false} wickT={3} wickB={3}/>
+      <Candle x={54}  y={66} h={16} bull={false} wickT={3} wickB={3}/>
+      {/* SSL sweep candle — long bearish wick reaching way down */}
+      <Candle x={74}  y={76} h={8}  bull={false} wickT={3} wickB={30}/>
+      {/* CISD candle — large bull close above swing high */}
+      <Candle x={94}  y={98} h={52} bull={true}  wickT={4} wickB={4}/>
+      {/* Continuation */}
+      <Candle x={114} y={46} h={18} bull={true}  wickT={3} wickB={3}/>
+      <Candle x={134} y={30} h={16} bull={true}  wickT={3} wickB={3}/>
+      <Candle x={154} y={16} h={14} bull={true}  wickT={3} wickB={3}/>
+      {/* Swing high line */}
+      <line x1="10" y1="72" x2="200" y2="72" stroke="#34d399" strokeWidth="1" strokeDasharray="5,3"/>
+      <Label x={204} y={74} text="Swing High" color="#34d399" size={6.5} anchor="start"/>
+      {/* SSL level */}
+      <line x1="10" y1="108" x2="200" y2="108" stroke="#f87171" strokeWidth="1" strokeDasharray="5,3"/>
+      <Label x={204} y={110} text="SSL" color="#f87171" size={6.5} anchor="start"/>
+      {/* CISD arrow */}
+      <Arrow x1={108} y1={108} x2={108} y2={68} color="#34d399"/>
+      <Label x={130} y={52} text="CISD" color="#34d399" size={8.5}/>
+      <Label x={78}  y={122} text="SSL swept → CISD close above swing high → entry" color={DIM} size={6.5}/>
+    </Base>
+  )
+}
+
 // ── Diagram registry ──────────────────────────────────────────────────────────
 import type { ReactElement } from 'react'
 export const DIAGRAMS: Record<string, () => ReactElement> = {
@@ -2044,4 +2073,5 @@ export const DIAGRAMS: Record<string, () => ReactElement> = {
   'flip':                    FlipDiagram,
   'htf-narrative':           HTFNarrativeDiagram,
   'poi':                     POIDiagram,
+  'cisd':                    CISDDiagram,
 }

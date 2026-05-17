@@ -1059,6 +1059,16 @@ export const TERMS: Term[] = [
     related: ['Fair Value Gap', 'Order Block', 'Convergence Zone', 'Optimal Trade Entry', 'PD Array', 'Kill Zones'],
   },
   {
+    id: 'cisd',
+    term: 'Change in State of Delivery',
+    abbr: 'CISD',
+    category: 'Market Structure',
+    diagramId: 'cisd',
+    definition: 'The moment the algorithm flips from one directional delivery to another, confirmed by a candle closing through the most recent swing point with momentum. On a 1-minute chart: a bullish CISD is a candle closing above the most recent 1m swing high immediately after sell-side liquidity is swept. A bearish CISD is a candle closing below the most recent swing low after buy-side liquidity is swept. CISD is the final trigger in top-down ICT models — every higher timeframe element must be in place before the CISD qualifies as an entry signal.',
+    example: 'Price sweeps a 1m SSL at 10:07 AM inside the Silver Bullet window. The next candle opens above the sweep low and closes above the prior 1m swing high — that close is the bullish CISD. Entry at close, stop below the sweep wick.',
+    related: ['Market Structure Shift', 'Change of Character', 'Displacement', 'Rejection Block', 'Silver Bullet', 'Kill Zones'],
+  },
+  {
     id: 'htf-narrative',
     term: 'HTF Narrative',
     category: 'SMC & Models',
