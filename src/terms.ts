@@ -1049,6 +1049,16 @@ export const TERMS: Term[] = [
     related: ['Breaker Block', 'Order Block', 'Break of Structure', 'Inversion FVG'],
   },
   {
+    id: 'poi',
+    term: 'Point of Interest',
+    abbr: 'POI',
+    category: 'Price Delivery',
+    diagramId: 'poi',
+    definition: 'A specific price level or narrow zone that warrants active attention because multiple PD array tools converge at the same price — an FVG overlapping an Order Block at the OTE Fibonacci retracement, for example. A POI is the strongest version of a confluence zone: price has a compelling institutional reason to react from multiple frameworks simultaneously. ICT traders pre-mark POIs before the session and wait for price to arrive at them during kill zones.',
+    example: 'Price displaces bullishly leaving an FVG from 4500–4510. The last bearish candle before the move (OB) sits at 4503–4507. The 61.8% retracement is 4505. The POI is 4503–4507 — three tools stacked at the same price. Enter long when price enters this zone during the NY AM kill zone.',
+    related: ['Fair Value Gap', 'Order Block', 'Convergence Zone', 'Optimal Trade Entry', 'PD Array', 'Kill Zones'],
+  },
+  {
     id: 'htf-narrative',
     term: 'HTF Narrative',
     category: 'SMC & Models',

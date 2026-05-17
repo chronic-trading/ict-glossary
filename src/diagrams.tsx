@@ -1894,6 +1894,26 @@ export function HTFNarrativeDiagram() {
   )
 }
 
+export function POIDiagram() {
+  return (
+    <Base>
+      <Zone x={55} y={40} w={145} h={44} color="#f59e0b" label=""/>
+      <Zone x={55} y={46} w={145} h={32} color="#c084fc" label=""/>
+      <Zone x={55} y={52} w={145} h={18} color="#34d399" label=""/>
+      <line x1="50" y1="61" x2="215" y2="61" stroke="#f59e0b" strokeWidth="1.8" strokeDasharray="5,3"/>
+      <Label x={208} y={44}  text="FVG"    color="#f59e0b" size={7} anchor="start"/>
+      <Label x={208} y={56}  text="OB"     color="#c084fc" size={7} anchor="start"/>
+      <Label x={208} y={66}  text="61.8%"  color="#34d399" size={7} anchor="start"/>
+      <Label x={130} y={36}  text="POINT OF INTEREST (POI)" color="#f59e0b" size={7.5}/>
+      <Arrow x1={155} y1={102} x2={138} y2={76} color="#f59e0b"/>
+      <Label x={158} y={107} text="Enter here during kill zone" color={DIM} size={6.5} anchor="start"/>
+      <Candle x={22} y={82} h={20} bull={false} wickT={4} wickB={4}/>
+      <Candle x={46} y={72} h={22} bull={false} wickT={4} wickB={4}/>
+      <Label x={130} y={122} text="FVG + OB + Fib at same price = highest-probability zone" color={DIM} size={7}/>
+    </Base>
+  )
+}
+
 // ── Diagram registry ──────────────────────────────────────────────────────────
 import type { ReactElement } from 'react'
 export const DIAGRAMS: Record<string, () => ReactElement> = {
@@ -2023,4 +2043,5 @@ export const DIAGRAMS: Record<string, () => ReactElement> = {
   'order-flow':              OrderFlowDiagram,
   'flip':                    FlipDiagram,
   'htf-narrative':           HTFNarrativeDiagram,
+  'poi':                     POIDiagram,
 }
