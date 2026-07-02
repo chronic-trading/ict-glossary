@@ -5,6 +5,7 @@ import {
 } from './terms'
 import { DIAGRAMS } from './diagrams'
 import { SuiteBar } from './SuiteBar'
+import { QuizMode } from './QuizMode'
 
 // ── Category metadata ─────────────────────────────────────────────────────────
 const CAT_ICONS: Record<string, string> = {
@@ -316,6 +317,7 @@ export default function App() {
   const [activeCategory, setActiveCategory] = useState<Category | null>(null)
   const [activeLetter,   setActiveLetter]   = useState<string | null>(null)
   const [navShadow,      setNavShadow]      = useState(false)
+  const [quizOpen,       setQuizOpen]       = useState(false)
   const [learned,        setLearned]        = useState<Set<string>>(() => {
     try { return new Set(JSON.parse(localStorage.getItem('ict:learned') ?? '[]')) }
     catch { return new Set() }
@@ -393,6 +395,7 @@ export default function App() {
   return (
     <div style={{ minHeight:'100vh', background:'#04040a', color:'white', position:'relative' }}>
       <SuiteBar current="glossary" />
+      {quizOpen && <QuizMode onClose={() => setQuizOpen(false)} />}
       <ICTNetworkBg />
 
       {/* ══ Nav ══ */}
@@ -416,6 +419,12 @@ export default function App() {
               </div>
             )}
             <div style={{ width:1, height:14, background:'rgba(255,255,255,0.07)' }}/>
+            <button onClick={() => setQuizOpen(true)}
+              style={{ fontSize:9, fontWeight:900, letterSpacing:'0.1em', padding:'4px 10px', borderRadius:7, background:'rgba(245,158,11,0.1)', color:'#f59e0b', border:'1px solid rgba(245,158,11,0.25)', cursor:'pointer', transition:'all 0.15s' }}
+              onMouseEnter={e => (e.currentTarget.style.background='rgba(245,158,11,0.18)')}
+              onMouseLeave={e => (e.currentTarget.style.background='rgba(245,158,11,0.1)')}>
+              ⚡ QUIZ
+            </button>
             <div style={{ fontSize:9, fontWeight:900, letterSpacing:'0.1em', padding:'4px 9px', borderRadius:7, background:'rgba(52,211,153,0.1)', color:'#34d399', border:'1px solid rgba(52,211,153,0.22)' }}>
               {TERMS.length} terms
             </div>
