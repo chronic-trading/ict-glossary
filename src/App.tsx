@@ -4,6 +4,7 @@ import {
   ALL_LETTERS, type Term, type Category,
 } from './terms'
 import { DIAGRAMS } from './diagrams'
+import { SuiteBar } from './SuiteBar'
 
 // ── Category metadata ─────────────────────────────────────────────────────────
 const CAT_ICONS: Record<string, string> = {
@@ -120,7 +121,7 @@ function DailyTermBanner({ onSearch }: { onSearch: (q: string) => void }) {
           </button>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0 }}>
+        <div className="daily-grid" style={{ gap: 0 }}>
           {/* Left: info */}
           <div style={{ padding: '16px 20px 20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
@@ -391,6 +392,7 @@ export default function App() {
 
   return (
     <div style={{ minHeight:'100vh', background:'#04040a', color:'white', position:'relative' }}>
+      <SuiteBar current="glossary" />
       <ICTNetworkBg />
 
       {/* ══ Nav ══ */}
@@ -428,7 +430,7 @@ export default function App() {
         <div style={{ position:'absolute', top:0, left:0, right:0, height:2, background:'linear-gradient(90deg,transparent,rgba(245,158,11,0.7),transparent)' }}/>
 
         {/* Side labels */}
-        <div style={{ position:'absolute', left:'2%', top:'15%', bottom:'15%', width:'130px', pointerEvents:'none', display:'flex', flexDirection:'column', justifyContent:'space-evenly', opacity:0.55 }}>
+        <div className="hero-side" style={{ position:'absolute', left:'2%', top:'15%', bottom:'15%', width:'130px', pointerEvents:'none', flexDirection:'column', justifyContent:'space-evenly', opacity:0.55 }}>
           {CATEGORIES.slice(0,4).map(cat => (
             <div key={cat} style={{ display:'flex', alignItems:'center', gap:6 }}>
               <div style={{ width:18, height:1, background:CATEGORY_COLORS[cat], opacity:0.6 }}/>
@@ -436,7 +438,7 @@ export default function App() {
             </div>
           ))}
         </div>
-        <div style={{ position:'absolute', right:'2%', top:'15%', bottom:'15%', width:'130px', pointerEvents:'none', display:'flex', flexDirection:'column', justifyContent:'space-evenly', alignItems:'flex-end', opacity:0.55 }}>
+        <div className="hero-side" style={{ position:'absolute', right:'2%', top:'15%', bottom:'15%', width:'130px', pointerEvents:'none', flexDirection:'column', justifyContent:'space-evenly', alignItems:'flex-end', opacity:0.55 }}>
           {CATEGORIES.slice(3).map(cat => (
             <div key={cat} style={{ display:'flex', alignItems:'center', gap:6 }}>
               <span style={{ fontSize:7.5, fontWeight:900, letterSpacing:'0.14em', color:CATEGORY_COLORS[cat], textTransform:'uppercase', opacity:0.65, whiteSpace:'nowrap' }}>{cat.split(' ')[0]}</span>

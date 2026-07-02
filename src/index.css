@@ -6,7 +6,7 @@
 body {
   background: #04040a;
   color: white;
-  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
@@ -254,4 +254,15 @@ body {
 .stat-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 32px color-mix(in srgb, var(--accent, #f59e0b) 18%, transparent);
+}
+
+/* ── Responsive layout ───────────────────────────────────────────────────────── */
+.hero-side { display: flex; }
+.daily-grid { display: grid; grid-template-columns: 1fr 1fr; }
+
+@media (max-width: 900px) {
+  .hero-side { display: none; }
+}
+@media (max-width: 700px) {
+  .daily-grid { grid-template-columns: 1fr; }
 }
