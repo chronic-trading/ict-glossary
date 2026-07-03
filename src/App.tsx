@@ -161,13 +161,37 @@ function DailyTermBanner({ onSearch }: { onSearch: (q: string) => void }) {
 }
 
 // ── Term card ─────────────────────────────────────────────────────────────────
-function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned }: {
+// Clipboard fallback for contexts where the async API is unavailable or rejects
+function legacyCopy(text: string) {
+  const ta = document.createElement('textarea')
+  ta.value = text
+  ta.style.position = 'fixed'
+  ta.style.opacity = '0'
+  document.body.appendChild(ta)
+  ta.select()
+  try { document.execCommand('copy') } catch { /* best effort */ }
+  document.body.removeChild(ta)
+}
+
+function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, flash }: {
   term: Term; onRelatedClick: (name: string) => void; highlight?: string
-  learned: boolean; onToggleLearned: (id: string) => void
+  learned: boolean; onToggleLearned: (id: string) => void; flash?: boolean
 }) {
   const [expanded, setExpanded] = useState(false)
+  const [copied,   setCopied]   = useState(false)
   const color = CATEGORY_COLORS[term.category]
   const DiagramComp = DIAGRAMS[term.diagramId]
+
+  function copyLink(e: React.MouseEvent) {
+    e.stopPropagation()
+    const url = `${window.location.origin}${window.location.pathname}?t=${term.id}`
+    const flash = () => { setCopied(true); setTimeout(() => setCopied(false), 1500) }
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(url).then(flash).catch(() => { legacyCopy(url); flash() })
+    } else {
+      legacyCopy(url); flash()
+    }
+  }
 
   function hl(text: string) {
     if (!highlight || highlight.length < 2) return <>{text}</>
@@ -178,12 +202,13 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned }:
   }
 
   return (
-    <div className="gcard" style={{
+    <div className="gcard" id={`term-${term.id}`} style={{
       '--accent': color, borderRadius:18, overflow:'hidden',
       background: learned ? `rgba(5,5,12,0.97)` : 'rgba(5,5,12,0.97)',
       borderTop:`1px solid ${color}22`, borderRight:`1px solid ${color}10`,
       borderBottom:`1px solid ${learned ? color+'35' : color+'10'}`,
       borderLeft:`3px solid ${color}`,
+      ...(flash ? { boxShadow:`0 0 0 2px ${color}, 0 0 32px ${color}66`, transition:'box-shadow 0.4s' } : {}),
     } as React.CSSProperties}
       onClick={() => setExpanded(e => !e)}
     >
@@ -210,6 +235,16 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned }:
           <h3 style={{ fontSize:14, fontWeight:900, color:'rgba(255,255,255,0.96)', lineHeight:1.2, flex:1, letterSpacing:'-0.2px' }}>{term.term}</h3>
           <div style={{ display:'flex', alignItems:'center', gap:5, flexShrink:0 }}>
             {term.abbr && <span style={{ fontSize:9, fontWeight:900, letterSpacing:'0.14em', padding:'3px 8px', borderRadius:7, background:`${color}16`, color, border:`1px solid ${color}30` }}>{term.abbr}</span>}
+            {/* Copy shareable link */}
+            <button
+              onClick={copyLink}
+              title={copied ? 'Link copied!' : 'Copy link to this term'}
+              style={{ fontSize:11, background:'none', border:'none', cursor:'pointer', padding:'2px 3px', borderRadius:6, lineHeight:1, opacity: copied ? 1 : 0.3, transition:'opacity 0.2s, transform 0.15s', color: copied ? '#34d399' : 'rgba(148,163,184,0.8)' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity='1'; (e.currentTarget as HTMLElement).style.transform='scale(1.15)' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity=copied?'1':'0.3'; (e.currentTarget as HTMLElement).style.transform='scale(1)' }}
+            >
+              {copied ? '✓' : '🔗'}
+            </button>
             {/* Learned toggle */}
             <button
               onClick={e => { e.stopPropagation(); onToggleLearned(term.id) }}
@@ -318,6 +353,7 @@ export default function App() {
   const [activeLetter,   setActiveLetter]   = useState<string | null>(null)
   const [navShadow,      setNavShadow]      = useState(false)
   const [quizOpen,       setQuizOpen]       = useState(false)
+  const [linkedId,       setLinkedId]       = useState<string | null>(null)
   const [learned,        setLearned]        = useState<Set<string>>(() => {
     try { return new Set(JSON.parse(localStorage.getItem('ict:learned') ?? '[]')) }
     catch { return new Set() }
@@ -331,13 +367,20 @@ export default function App() {
     return () => window.removeEventListener('scroll', fn)
   }, [])
 
-  // URL deep link: ?t=term-id
+  // URL deep link: ?t=term-id → filter to the term, scroll to it, flash it
   useEffect(() => {
     const p = new URLSearchParams(window.location.search)
     const termId = p.get('t')
     if (termId) {
       const term = TERMS.find(t => t.id === termId)
-      if (term) setQuery(term.term)
+      if (term) {
+        setQuery(term.term)
+        setLinkedId(termId)
+        setTimeout(() => {
+          document.getElementById(`term-${termId}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }, 350)
+        setTimeout(() => setLinkedId(null), 3200)
+      }
     }
   }, [])
 
@@ -586,7 +629,7 @@ export default function App() {
             <div className="card-grid" style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))', gap:12, alignItems:'start' }}>
               {displayed.map(term => (
                 <TermCard key={term.id} term={term} highlight={query} onRelatedClick={handleRelatedClick}
-                  learned={learned.has(term.id)} onToggleLearned={toggleLearned} />
+                  learned={learned.has(term.id)} onToggleLearned={toggleLearned} flash={linkedId === term.id} />
               ))}
             </div>
           )}
