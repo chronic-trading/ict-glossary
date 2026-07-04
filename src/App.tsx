@@ -6,6 +6,7 @@ import {
 import { DIAGRAMS } from './diagrams'
 import { SuiteBar } from './SuiteBar'
 import { QuizMode } from './QuizMode'
+import { probeSync, pushNamespace, onAuthChange } from './lib/crossSync'
 
 // ── Category metadata ─────────────────────────────────────────────────────────
 const CAT_ICONS: Record<string, string> = {
@@ -358,7 +359,35 @@ export default function App() {
     try { return new Set(JSON.parse(localStorage.getItem('ict:learned') ?? '[]')) }
     catch { return new Set() }
   })
+  const [signedIn,       setSignedIn]       = useState(false)
   const searchRef = useRef<HTMLInputElement>(null)
+
+  // ── Cross-site sync: piggyback on the shared Chronic Trading Supabase session ──
+  useEffect(() => {
+    let alive = true
+    const sync = () => probeSync().then(({ status, blob }) => {
+      if (!alive) return
+      setSignedIn(status === 'ready')  // only claim "synced" when the round-trip works
+      const remote = blob.glossary as { learned?: string[] } | undefined
+      if (status === 'ready' && remote?.learned) {
+        setLearned(local => {
+          const merged = new Set([...local, ...remote.learned!])
+          localStorage.setItem('ict:learned', JSON.stringify([...merged]))
+          return merged
+        })
+      }
+    })
+    sync()
+    const off = onAuthChange(() => { sync() })
+    return () => { alive = false; off() }
+  }, [])
+
+  // Debounced push of the learned set whenever it changes (only while signed in)
+  useEffect(() => {
+    if (!signedIn) return
+    const t = setTimeout(() => { pushNamespace('glossary', { learned: [...learned] }) }, 1200)
+    return () => clearTimeout(t)
+  }, [signedIn, learned])
 
   // Scroll shadow
   useEffect(() => {
@@ -468,6 +497,12 @@ export default function App() {
               onMouseLeave={e => (e.currentTarget.style.background='rgba(245,158,11,0.1)')}>
               ⚡ QUIZ
             </button>
+            {signedIn && (
+              <div title="Signed in — your learned terms sync across your Chronic Trading account" style={{ display:'flex', alignItems:'center', gap:4, fontSize:9, fontWeight:800, letterSpacing:'0.06em', padding:'4px 8px', borderRadius:7, background:'rgba(52,211,153,0.08)', color:'#34d399', border:'1px solid rgba(52,211,153,0.22)' }}>
+                <span style={{ width:5, height:5, borderRadius:'50%', background:'#34d399', boxShadow:'0 0 6px #34d399' }}/>
+                Synced
+              </div>
+            )}
             <div style={{ fontSize:9, fontWeight:900, letterSpacing:'0.1em', padding:'4px 9px', borderRadius:7, background:'rgba(52,211,153,0.1)', color:'#34d399', border:'1px solid rgba(52,211,153,0.22)' }}>
               {TERMS.length} terms
             </div>
