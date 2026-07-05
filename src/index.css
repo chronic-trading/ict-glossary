@@ -1,15 +1,50 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   Theme tokens — warm light default, dark opt-in. Dark values are the app's
+   ORIGINAL hardcoded colors so dark mode is pixel-identical. Inline styles
+   reference var(--gl-…). Shared `tl:theme` key syncs across all three sites.
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root {
+  --gl-bg:         #f7f4ee;
+  --gl-nav:        rgba(255, 253, 249, 0.9);
+  --gl-surface:    #ffffff;
+  --gl-surface-2:  #f3eee4;
+  --gl-border:     #ece4d6;
+  --gl-border-2:   #dccfb9;
+  --gl-text:       #2c2720;
+  --gl-text-dim:   #6d6456;
+  --gl-text-faint: #8c8069;
+  --gl-hairline:   rgba(74, 58, 28, 0.06);
+  --gl-overlay:    rgba(247, 244, 238, 0.94);
+  color-scheme: light;
+}
+html[data-theme="dark"] {
+  --gl-bg:         #04040a;
+  --gl-nav:        rgba(4, 4, 10, 0.85);
+  --gl-surface:    rgba(5, 5, 14, 0.97);
+  --gl-surface-2:  rgba(255, 255, 255, 0.04);
+  --gl-border:     rgba(255, 255, 255, 0.08);
+  --gl-border-2:   rgba(255, 255, 255, 0.15);
+  --gl-text:       #ffffff;
+  --gl-text-dim:   rgba(148, 163, 184, 0.85);
+  --gl-text-faint: rgba(100, 116, 139, 0.7);
+  --gl-hairline:   rgba(255, 255, 255, 0.05);
+  --gl-overlay:    rgba(2, 2, 6, 0.96);
+  color-scheme: dark;
+}
+
 /* ── Reset & Base ────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  background: #04040a;
-  color: white;
+  background: var(--gl-bg);
+  color: var(--gl-text);
   font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 #root { min-height: 100vh; }

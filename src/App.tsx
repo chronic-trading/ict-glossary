@@ -7,6 +7,32 @@ import { DIAGRAMS } from './diagrams'
 import { SuiteBar } from './SuiteBar'
 import { QuizMode } from './QuizMode'
 import { probeSync, pushNamespace, onAuthChange } from './lib/crossSync'
+import { useTheme } from './useTheme'
+
+// ── Theme toggle ──────────────────────────────────────────────────────────────
+function ThemeToggle() {
+  const { theme, toggle } = useTheme()
+  return (
+    <button onClick={toggle} title={theme === 'light' ? 'Switch to dark' : 'Switch to light'} aria-label="Toggle theme"
+      style={{ display:'flex', alignItems:'center', justifyContent:'center', width:28, height:28, borderRadius:7, cursor:'pointer',
+        background:'var(--gl-surface-2)', border:'1px solid var(--gl-border)', color:'var(--gl-text-dim)', fontSize:13 }}>
+      {theme === 'light' ? '🌙' : '☀️'}
+    </button>
+  )
+}
+
+// Category hues are vivid for dark mode; on warm-light paper they're too pale as
+// text, so darken them (returns a HEX so `${color}NN` tint concatenations still
+// work). Dark mode returns the original vivid hue unchanged.
+function catInk(hex: string): string {
+  if (typeof document === 'undefined') return hex
+  if (document.documentElement.getAttribute('data-theme') !== 'light') return hex
+  if (!/^#[0-9a-fA-F]{6}$/.test(hex)) return hex
+  const n = parseInt(hex.slice(1), 16)
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255, k = 0.58
+  const h = (v: number) => Math.round(v * k).toString(16).padStart(2, '0')
+  return `#${h(r)}${h(g)}${h(b)}`
+}
 
 // ── Category metadata ─────────────────────────────────────────────────────────
 const CAT_ICONS: Record<string, string> = {
@@ -80,7 +106,7 @@ function Ticker() {
     <div style={{ overflow:'hidden', width:'100%', borderTop:'1px solid rgba(245,158,11,0.1)', borderBottom:'1px solid rgba(245,158,11,0.1)', background:'rgba(245,158,11,0.03)', padding:'6px 0', maskImage:'linear-gradient(90deg,transparent,black 6%,black 94%,transparent)', WebkitMaskImage:'linear-gradient(90deg,transparent,black 6%,black 94%,transparent)' }}>
       <div style={{ display:'flex', gap:'24px', whiteSpace:'nowrap', animation:`ticker-scroll ${items.length*0.9}s linear infinite`, willChange:'transform' }}>
         {full.map((label,i) => (
-          <span key={i} style={{ fontSize:'9px', fontWeight:900, letterSpacing:'0.14em', color:['#f59e0b','#34d399','#60a5fa','#c084fc','#fb923c','#f472b6','#14b8a6'][i%7], opacity:0.65 }}>
+          <span key={i} style={{ fontSize:'9px', fontWeight:900, letterSpacing:'0.14em', color:catInk(['#f59e0b','#34d399','#60a5fa','#c084fc','#fb923c','#f472b6','#14b8a6'][i%7]), opacity:0.65 }}>
             {label}
           </span>
         ))}
@@ -92,7 +118,7 @@ function Ticker() {
 // ── Daily featured term banner ────────────────────────────────────────────────
 function DailyTermBanner({ onSearch }: { onSearch: (q: string) => void }) {
   const term  = getDailyTerm()
-  const color = CATEGORY_COLORS[term.category]
+  const color = catInk(CATEGORY_COLORS[term.category])
   const DiagramComp = DIAGRAMS[term.diagramId]
   const [expanded, setExpanded] = useState(false)
 
@@ -100,7 +126,7 @@ function DailyTermBanner({ onSearch }: { onSearch: (q: string) => void }) {
     <div style={{ maxWidth: 1020, margin: '0 auto', padding: '0 20px 20px' }}>
       <div style={{
         borderRadius: 20, overflow: 'hidden',
-        background: `linear-gradient(135deg, ${color}10 0%, rgba(5,5,14,0.99) 50%)`,
+        background: `linear-gradient(135deg, ${color}10 0%, var(--gl-surface) 50%)`,
         border: `1px solid ${color}30`,
         boxShadow: `0 0 40px ${color}10`,
       }}>
@@ -109,7 +135,7 @@ function DailyTermBanner({ onSearch }: { onSearch: (q: string) => void }) {
             <span style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.22em', textTransform: 'uppercase', padding: '3px 10px', borderRadius: 7, background: `${color}18`, color, border: `1px solid ${color}28` }}>
               ✦ Term of the Day
             </span>
-            <span style={{ fontSize: 10, color: 'rgba(100,116,139,0.5)', fontWeight: 600 }}>
+            <span style={{ fontSize: 10, color: 'var(--gl-text-faint)', fontWeight: 600 }}>
               {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
             </span>
           </div>
@@ -127,14 +153,14 @@ function DailyTermBanner({ onSearch }: { onSearch: (q: string) => void }) {
           {/* Left: info */}
           <div style={{ padding: '16px 20px 20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-              <h3 style={{ fontSize: 20, fontWeight: 900, color: 'white', letterSpacing: '-0.5px' }}>{term.term}</h3>
+              <h3 style={{ fontSize: 20, fontWeight: 900, color: 'var(--gl-text)', letterSpacing: '-0.5px' }}>{term.term}</h3>
               {term.abbr && <span style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.14em', padding: '3px 8px', borderRadius: 7, background: `${color}16`, color, border: `1px solid ${color}30` }}>{term.abbr}</span>}
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 12 }}>
               <span style={{ width: 5, height: 5, borderRadius: '50%', background: color, boxShadow: `0 0 6px ${color}`, display: 'inline-block' }}/>
               <span style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.16em', color, textTransform: 'uppercase', opacity: 0.8 }}>{term.category}</span>
             </div>
-            <p style={{ fontSize: 12, color: 'rgba(148,163,184,0.85)', lineHeight: 1.7, display: '-webkit-box', WebkitLineClamp: expanded ? 'unset' : 4, WebkitBoxOrient: 'vertical', overflow: expanded ? 'visible' : 'hidden' }}>
+            <p style={{ fontSize: 12, color: 'var(--gl-text-dim)', lineHeight: 1.7, display: '-webkit-box', WebkitLineClamp: expanded ? 'unset' : 4, WebkitBoxOrient: 'vertical', overflow: expanded ? 'visible' : 'hidden' }}>
               {term.definition}
             </p>
             {!expanded && (
@@ -143,7 +169,7 @@ function DailyTermBanner({ onSearch }: { onSearch: (q: string) => void }) {
               </button>
             )}
             {expanded && term.example && (
-              <div style={{ marginTop: 12, padding: '10px 12px', borderRadius: 12, background: `${color}08`, border: `1px solid ${color}18`, fontSize: 11.5, color: 'rgba(148,163,184,0.85)', lineHeight: 1.65 }}>
+              <div style={{ marginTop: 12, padding: '10px 12px', borderRadius: 12, background: `${color}08`, border: `1px solid ${color}18`, fontSize: 11.5, color: 'var(--gl-text-dim)', lineHeight: 1.65 }}>
                 <span style={{ display: 'block', fontSize: 8.5, fontWeight: 900, letterSpacing: '0.18em', textTransform: 'uppercase', color, marginBottom: 6 }}>Example</span>
                 {term.example}
               </div>
@@ -180,7 +206,7 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
 }) {
   const [expanded, setExpanded] = useState(false)
   const [copied,   setCopied]   = useState(false)
-  const color = CATEGORY_COLORS[term.category]
+  const color = catInk(CATEGORY_COLORS[term.category])
   const DiagramComp = DIAGRAMS[term.diagramId]
 
   function copyLink(e: React.MouseEvent) {
@@ -205,7 +231,7 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
   return (
     <div className="gcard" id={`term-${term.id}`} style={{
       '--accent': color, borderRadius:18, overflow:'hidden',
-      background: learned ? `rgba(5,5,12,0.97)` : 'rgba(5,5,12,0.97)',
+      background: learned ? `var(--gl-surface)` : 'var(--gl-surface)',
       borderTop:`1px solid ${color}22`, borderRight:`1px solid ${color}10`,
       borderBottom:`1px solid ${learned ? color+'35' : color+'10'}`,
       borderLeft:`3px solid ${color}`,
@@ -219,7 +245,7 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
       {/* Diagram */}
       <div className="diagram-frame" style={{ background:`linear-gradient(160deg,${color}0e 0%,${color}03 50%,rgba(4,4,8,1) 80%)`, borderBottom:`1px solid ${color}14`, position:'relative' }}>
         <div style={{ position:'absolute', top:8, right:8, zIndex:3, display:'flex', gap:5, alignItems:'center' }}>
-          {learned && <span style={{ fontSize:7.5, background:'rgba(52,211,153,0.15)', color:'#34d399', border:'1px solid rgba(52,211,153,0.3)', borderRadius:5, padding:'2px 6px', fontWeight:900, letterSpacing:'0.1em' }}>✓ LEARNED</span>}
+          {learned && <span style={{ fontSize:7.5, background:'rgba(52,211,153,0.15)', color:catInk('#34d399'), border:'1px solid rgba(52,211,153,0.3)', borderRadius:5, padding:'2px 6px', fontWeight:900, letterSpacing:'0.1em' }}>✓ LEARNED</span>}
           <span style={{ fontSize:7, fontWeight:900, letterSpacing:'0.14em', padding:'3px 7px', borderRadius:6, background:`${color}14`, color, border:`1px solid ${color}28`, textTransform:'uppercase' }}>
             {CAT_SHORT[term.category]}
           </span>
@@ -233,14 +259,14 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
       {/* Body */}
       <div style={{ padding:'13px 14px 13px 12px', position:'relative', zIndex:1 }}>
         <div style={{ display:'flex', alignItems:'flex-start', gap:8, marginBottom:6 }}>
-          <h3 style={{ fontSize:14, fontWeight:900, color:'rgba(255,255,255,0.96)', lineHeight:1.2, flex:1, letterSpacing:'-0.2px' }}>{term.term}</h3>
+          <h3 style={{ fontSize:14, fontWeight:900, color:'var(--gl-text)', lineHeight:1.2, flex:1, letterSpacing:'-0.2px' }}>{term.term}</h3>
           <div style={{ display:'flex', alignItems:'center', gap:5, flexShrink:0 }}>
             {term.abbr && <span style={{ fontSize:9, fontWeight:900, letterSpacing:'0.14em', padding:'3px 8px', borderRadius:7, background:`${color}16`, color, border:`1px solid ${color}30` }}>{term.abbr}</span>}
             {/* Copy shareable link */}
             <button
               onClick={copyLink}
               title={copied ? 'Link copied!' : 'Copy link to this term'}
-              style={{ fontSize:11, background:'none', border:'none', cursor:'pointer', padding:'2px 3px', borderRadius:6, lineHeight:1, opacity: copied ? 1 : 0.3, transition:'opacity 0.2s, transform 0.15s', color: copied ? '#34d399' : 'rgba(148,163,184,0.8)' }}
+              style={{ fontSize:11, background:'none', border:'none', cursor:'pointer', padding:'2px 3px', borderRadius:6, lineHeight:1, opacity: copied ? 1 : 0.3, transition:'opacity 0.2s, transform 0.15s', color: copied ? '#34d399' : 'var(--gl-text-dim)' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity='1'; (e.currentTarget as HTMLElement).style.transform='scale(1.15)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity=copied?'1':'0.3'; (e.currentTarget as HTMLElement).style.transform='scale(1)' }}
             >
@@ -264,7 +290,7 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
           <span style={{ fontSize:9, fontWeight:900, letterSpacing:'0.16em', color, textTransform:'uppercase', opacity:0.8 }}>{term.category}</span>
         </div>
 
-        <p style={{ fontSize:12, color:'rgba(148,163,184,0.85)', lineHeight:1.68, display:'-webkit-box', WebkitLineClamp:expanded?'unset':3, WebkitBoxOrient:'vertical', overflow:expanded?'visible':'hidden' }}>
+        <p style={{ fontSize:12, color:'var(--gl-text-dim)', lineHeight:1.68, display:'-webkit-box', WebkitLineClamp:expanded?'unset':3, WebkitBoxOrient:'vertical', overflow:expanded?'visible':'hidden' }}>
           {highlight ? hl(term.definition) : term.definition}
         </p>
 
@@ -278,7 +304,7 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
         {expanded && (
           <div className="expand-content" style={{ marginTop:12, borderTop:`1px solid ${color}14`, paddingTop:12 }}>
             {term.example && (
-              <div style={{ padding:'10px 12px', borderRadius:12, marginBottom:10, background:`${color}08`, border:`1px solid ${color}18`, fontSize:11.5, color:'rgba(148,163,184,0.85)', lineHeight:1.65 }}>
+              <div style={{ padding:'10px 12px', borderRadius:12, marginBottom:10, background:`${color}08`, border:`1px solid ${color}18`, fontSize:11.5, color:'var(--gl-text-dim)', lineHeight:1.65 }}>
                 <span style={{ display:'block', fontSize:8.5, fontWeight:900, letterSpacing:'0.18em', textTransform:'uppercase', color, marginBottom:6 }}>Example</span>
                 {term.example}
               </div>
@@ -311,18 +337,18 @@ function CategoryCards({ onSelect, active }: { onSelect: (c: Category | null) =>
       <div style={{ maxWidth:1020, margin:'0 auto' }}>
         <div style={{ textAlign:'center', marginBottom:28 }}>
           <p style={{ fontSize:9, fontWeight:900, letterSpacing:'0.24em', textTransform:'uppercase', color:'rgba(100,116,139,0.3)', marginBottom:8 }}>Explore by Category</p>
-          <h2 style={{ fontSize:'clamp(22px,4vw,34px)', fontWeight:900, letterSpacing:'-1px', color:'white' }}>7 Core ICT Frameworks</h2>
-          <p style={{ fontSize:13, color:'rgba(100,116,139,0.6)', marginTop:8, maxWidth:400, margin:'8px auto 0' }}>Every concept organized by its role in the ICT methodology.</p>
+          <h2 style={{ fontSize:'clamp(22px,4vw,34px)', fontWeight:900, letterSpacing:'-1px', color:'var(--gl-text)' }}>7 Core ICT Frameworks</h2>
+          <p style={{ fontSize:13, color:'var(--gl-text-faint)', marginTop:8, maxWidth:400, margin:'8px auto 0' }}>Every concept organized by its role in the ICT methodology.</p>
         </div>
         <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))', gap:12 }}>
           {CATEGORIES.map(cat => {
-            const color  = CATEGORY_COLORS[cat]
+            const color  = catInk(CATEGORY_COLORS[cat])
             const count  = TERMS.filter(t => t.category === cat).length
             const isActive = active === cat
             const sample = TERMS.filter(t => t.category === cat).slice(0,3).map(t => t.abbr || t.term.split(' ')[0])
             return (
               <button key={cat} onClick={() => { onSelect(isActive ? null : cat); window.scrollTo({ top:0, behavior:'smooth' }) }}
-                style={{ '--accent':color, borderRadius:18, padding:'22px 20px', textAlign:'left', cursor:'pointer', background:isActive?`${color}14`:'rgba(5,5,14,0.97)', border:`1px solid ${isActive?color+'45':color+'18'}`, boxShadow:isActive?`0 0 32px ${color}18`:'none', transition:'all 0.2s ease', position:'relative', overflow:'hidden' } as React.CSSProperties}
+                style={{ '--accent':color, borderRadius:18, padding:'22px 20px', textAlign:'left', cursor:'pointer', background:isActive?`${color}14`:'var(--gl-surface)', border:`1px solid ${isActive?color+'45':color+'18'}`, boxShadow:isActive?`0 0 32px ${color}18`:'none', transition:'all 0.2s ease', position:'relative', overflow:'hidden' } as React.CSSProperties}
                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform='translateY(-2px)'; (e.currentTarget as HTMLElement).style.boxShadow=`0 12px 40px ${color}18, 0 0 0 1px ${color}30` }}
                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform=''; (e.currentTarget as HTMLElement).style.boxShadow=isActive?`0 0 32px ${color}18`:'' }}>
                 <div style={{ position:'absolute', top:0, left:0, right:0, height:1, background:`linear-gradient(90deg,transparent,${color},transparent)`, opacity:0.6 }}/>
@@ -330,7 +356,7 @@ function CategoryCards({ onSelect, active }: { onSelect: (c: Category | null) =>
                 <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:12 }}>
                   <div style={{ width:36, height:36, borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontSize:18, background:`${color}15`, border:`1px solid ${color}28`, flexShrink:0 }}>{CAT_ICONS[cat]}</div>
                   <div>
-                    <p style={{ fontSize:13, fontWeight:900, color:'white', lineHeight:1.2 }}>{cat}</p>
+                    <p style={{ fontSize:13, fontWeight:900, color:'var(--gl-text)', lineHeight:1.2 }}>{cat}</p>
                     <p style={{ fontSize:10, color, fontWeight:700, opacity:0.8 }}>{count} concepts</p>
                   </div>
                 </div>
@@ -349,6 +375,7 @@ function CategoryCards({ onSelect, active }: { onSelect: (c: Category | null) =>
 
 // ── App ───────────────────────────────────────────────────────────────────────
 export default function App() {
+  useTheme() // re-render the tree on theme toggle so catInk() re-resolves
   const [query,          setQuery]          = useState('')
   const [activeCategory, setActiveCategory] = useState<Category | null>(null)
   const [activeLetter,   setActiveLetter]   = useState<string | null>(null)
@@ -465,47 +492,48 @@ export default function App() {
   }, [])
 
   return (
-    <div style={{ minHeight:'100vh', background:'#04040a', color:'white', position:'relative' }}>
+    <div style={{ minHeight:'100vh', background:'var(--gl-bg)', color:'var(--gl-text)', position:'relative' }}>
       <SuiteBar current="glossary" />
       {quizOpen && <QuizMode onClose={() => setQuizOpen(false)} />}
       <ICTNetworkBg />
 
       {/* ══ Nav ══ */}
-      <nav style={{ borderBottom:'1px solid rgba(255,255,255,0.055)', position:'sticky', top:0, zIndex:50, background:navShadow?'rgba(4,4,10,0.97)':'rgba(4,4,10,0.85)', backdropFilter:'blur(24px)', boxShadow:navShadow?'0 1px 40px rgba(0,0,0,0.7)':'none', transition:'background 0.3s,box-shadow 0.3s' }}>
+      <nav style={{ borderBottom:'1px solid var(--gl-border)', position:'sticky', top:0, zIndex:50, background:navShadow?'var(--gl-nav)':'var(--gl-nav)', backdropFilter:'blur(24px)', boxShadow:navShadow?'0 1px 40px rgba(0,0,0,0.7)':'none', transition:'background 0.3s,box-shadow 0.3s' }}>
         <Ticker />
         <div style={{ maxWidth:1020, margin:'0 auto', padding:'0 20px', height:50, display:'flex', alignItems:'center', justifyContent:'space-between' }}>
           <div style={{ display:'flex', alignItems:'center', gap:10 }}>
             <div style={{ width:30, height:30, borderRadius:9, display:'flex', alignItems:'center', justifyContent:'center', fontSize:14, background:'rgba(245,158,11,0.12)', border:'1px solid rgba(245,158,11,0.28)', boxShadow:'0 0 12px rgba(245,158,11,0.12)' }}>📖</div>
             <div style={{ display:'flex', alignItems:'baseline', gap:7 }}>
-              <span style={{ fontSize:12, fontWeight:900, letterSpacing:'0.2em', color:'white' }}>ICT GLOSSARY</span>
-              <span style={{ fontSize:9, fontWeight:700, letterSpacing:'0.12em', textTransform:'uppercase', color:'rgba(245,158,11,0.4)' }}>by Chronic Trading</span>
+              <span style={{ fontSize:12, fontWeight:900, letterSpacing:'0.2em', color:'var(--gl-text)' }}>ICT GLOSSARY</span>
+              <span style={{ fontSize:9, fontWeight:700, letterSpacing:'0.12em', textTransform:'uppercase', color:'var(--gl-text-faint)' }}>by Chronic Trading</span>
             </div>
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:8 }}>
             {learnedCount > 0 && (
               <div style={{ display:'flex', alignItems:'center', gap:6 }}>
-                <div style={{ width:60, height:4, borderRadius:2, background:'rgba(255,255,255,0.08)', overflow:'hidden' }}>
+                <div style={{ width:60, height:4, borderRadius:2, background:'var(--gl-border)', overflow:'hidden' }}>
                   <div style={{ width:`${learnedPct}%`, height:'100%', background:'linear-gradient(90deg,#34d399,#059669)', borderRadius:2, transition:'width 0.4s ease' }}/>
                 </div>
                 <span style={{ fontSize:9, fontWeight:700, color:'rgba(52,211,153,0.7)' }}>{learnedCount}/{TERMS.length}</span>
               </div>
             )}
-            <div style={{ width:1, height:14, background:'rgba(255,255,255,0.07)' }}/>
+            <div style={{ width:1, height:14, background:'var(--gl-border)' }}/>
             <button onClick={() => setQuizOpen(true)}
-              style={{ fontSize:9, fontWeight:900, letterSpacing:'0.1em', padding:'4px 10px', borderRadius:7, background:'rgba(245,158,11,0.1)', color:'#f59e0b', border:'1px solid rgba(245,158,11,0.25)', cursor:'pointer', transition:'all 0.15s' }}
+              style={{ fontSize:9, fontWeight:900, letterSpacing:'0.1em', padding:'4px 10px', borderRadius:7, background:'rgba(245,158,11,0.1)', color:catInk('#f59e0b'), border:'1px solid rgba(245,158,11,0.25)', cursor:'pointer', transition:'all 0.15s' }}
               onMouseEnter={e => (e.currentTarget.style.background='rgba(245,158,11,0.18)')}
               onMouseLeave={e => (e.currentTarget.style.background='rgba(245,158,11,0.1)')}>
               ⚡ QUIZ
             </button>
             {signedIn && (
-              <div title="Signed in — your learned terms sync across your Chronic Trading account" style={{ display:'flex', alignItems:'center', gap:4, fontSize:9, fontWeight:800, letterSpacing:'0.06em', padding:'4px 8px', borderRadius:7, background:'rgba(52,211,153,0.08)', color:'#34d399', border:'1px solid rgba(52,211,153,0.22)' }}>
+              <div title="Signed in — your learned terms sync across your Chronic Trading account" style={{ display:'flex', alignItems:'center', gap:4, fontSize:9, fontWeight:800, letterSpacing:'0.06em', padding:'4px 8px', borderRadius:7, background:'rgba(52,211,153,0.08)', color:catInk('#34d399'), border:'1px solid rgba(52,211,153,0.22)' }}>
                 <span style={{ width:5, height:5, borderRadius:'50%', background:'#34d399', boxShadow:'0 0 6px #34d399' }}/>
                 Synced
               </div>
             )}
-            <div style={{ fontSize:9, fontWeight:900, letterSpacing:'0.1em', padding:'4px 9px', borderRadius:7, background:'rgba(52,211,153,0.1)', color:'#34d399', border:'1px solid rgba(52,211,153,0.22)' }}>
+            <div style={{ fontSize:9, fontWeight:900, letterSpacing:'0.1em', padding:'4px 9px', borderRadius:7, background:'rgba(52,211,153,0.1)', color:catInk('#34d399'), border:'1px solid rgba(52,211,153,0.22)' }}>
               {TERMS.length} terms
             </div>
+            <ThemeToggle />
           </div>
         </div>
       </nav>
@@ -521,14 +549,14 @@ export default function App() {
           {CATEGORIES.slice(0,4).map(cat => (
             <div key={cat} style={{ display:'flex', alignItems:'center', gap:6 }}>
               <div style={{ width:18, height:1, background:CATEGORY_COLORS[cat], opacity:0.6 }}/>
-              <span style={{ fontSize:7.5, fontWeight:900, letterSpacing:'0.14em', color:CATEGORY_COLORS[cat], textTransform:'uppercase', opacity:0.65, whiteSpace:'nowrap' }}>{cat.split(' ')[0]}</span>
+              <span style={{ fontSize:7.5, fontWeight:900, letterSpacing:'0.14em', color:catInk(CATEGORY_COLORS[cat]), textTransform:'uppercase', opacity:0.65, whiteSpace:'nowrap' }}>{cat.split(' ')[0]}</span>
             </div>
           ))}
         </div>
         <div className="hero-side" style={{ position:'absolute', right:'2%', top:'15%', bottom:'15%', width:'130px', pointerEvents:'none', flexDirection:'column', justifyContent:'space-evenly', alignItems:'flex-end', opacity:0.55 }}>
           {CATEGORIES.slice(3).map(cat => (
             <div key={cat} style={{ display:'flex', alignItems:'center', gap:6 }}>
-              <span style={{ fontSize:7.5, fontWeight:900, letterSpacing:'0.14em', color:CATEGORY_COLORS[cat], textTransform:'uppercase', opacity:0.65, whiteSpace:'nowrap' }}>{cat.split(' ')[0]}</span>
+              <span style={{ fontSize:7.5, fontWeight:900, letterSpacing:'0.14em', color:catInk(CATEGORY_COLORS[cat]), textTransform:'uppercase', opacity:0.65, whiteSpace:'nowrap' }}>{cat.split(' ')[0]}</span>
               <div style={{ width:18, height:1, background:CATEGORY_COLORS[cat], opacity:0.6 }}/>
             </div>
           ))}
@@ -537,36 +565,36 @@ export default function App() {
         <div style={{ position:'relative', zIndex:2, maxWidth:740, margin:'0 auto' }}>
           <div className="animate-glow" style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'6px 16px', borderRadius:999, border:'1px solid rgba(245,158,11,0.28)', background:'rgba(245,158,11,0.07)', marginBottom:22 }}>
             <span style={{ width:6, height:6, borderRadius:'50%', background:'#f59e0b', boxShadow:'0 0 8px #f59e0b,0 0 16px #f59e0b60', display:'inline-block' }}/>
-            <span style={{ fontSize:10, fontWeight:900, letterSpacing:'0.22em', textTransform:'uppercase', color:'rgba(245,158,11,0.9)' }}>
+            <span style={{ fontSize:10, fontWeight:900, letterSpacing:'0.22em', textTransform:'uppercase', color:catInk('#f59e0b') }}>
               {TERMS.length} Concepts · Every one visualised
             </span>
           </div>
 
           <h1 style={{ fontWeight:900, lineHeight:0.88, fontSize:'clamp(40px,8vw,72px)', letterSpacing:'clamp(-2px,-0.04em,-3.5px)', marginBottom:18 }}>
             The <span className="gold-title">ICT&thinsp;/&thinsp;SMC</span>
-            <br/><span style={{ color:'rgba(255,255,255,0.95)' }}>Glossary.</span>
+            <br/><span style={{ color:'var(--gl-text)' }}>Glossary.</span>
           </h1>
 
-          <p style={{ color:'rgba(148,163,184,0.78)', lineHeight:1.7, fontSize:'clamp(13px,2vw,16px)', maxWidth:480, margin:'0 auto 28px' }}>
+          <p style={{ color:'var(--gl-text-dim)', lineHeight:1.7, fontSize:'clamp(13px,2vw,16px)', maxWidth:480, margin:'0 auto 28px' }}>
             Every concept defined, visualised with a custom SVG diagram, and cross-linked.
             The complete reference for ICT and Smart Money Concepts trading.
           </p>
 
           {/* Search */}
           <div style={{ position:'relative', maxWidth:540, margin:'0 auto 12px' }}>
-            <span style={{ position:'absolute', left:18, top:'50%', transform:'translateY(-50%)', color:query?'rgba(245,158,11,0.7)':'rgba(100,116,139,0.6)', fontSize:16, pointerEvents:'none', transition:'color 0.2s' }}>
+            <span style={{ position:'absolute', left:18, top:'50%', transform:'translateY(-50%)', color:query?'rgba(245,158,11,0.7)':'var(--gl-text-faint)', fontSize:16, pointerEvents:'none', transition:'color 0.2s' }}>
               {query ? '✦' : '⌕'}
             </span>
             <input ref={searchRef} className="search-input" value={query}
               onChange={e => { setQuery(e.target.value); setActiveLetter(null) }}
               placeholder="Search terms, abbreviations, definitions…"
-              style={{ width:'100%', padding:'15px 44px 15px 46px', borderRadius:16, fontSize:14, color:'white', background:query?'rgba(8,8,18,0.98)':'rgba(6,6,14,0.88)', border:`1.5px solid ${query?'rgba(245,158,11,0.5)':'rgba(255,255,255,0.09)'}`, boxShadow:query?'0 0 0 3px rgba(245,158,11,0.08),0 8px 32px rgba(0,0,0,0.5)':'0 4px 24px rgba(0,0,0,0.35)', outline:'none', transition:'all 0.22s', boxSizing:'border-box' }}
+              style={{ width:'100%', padding:'15px 44px 15px 46px', borderRadius:16, fontSize:14, color:'var(--gl-text)', background:query?'var(--gl-surface)':'var(--gl-surface)', border:`1.5px solid ${query?'rgba(245,158,11,0.5)':'var(--gl-border)'}`, boxShadow:query?'0 0 0 3px rgba(245,158,11,0.08),0 8px 32px rgba(0,0,0,0.5)':'0 4px 24px rgba(0,0,0,0.35)', outline:'none', transition:'all 0.22s', boxSizing:'border-box' }}
               autoComplete="off" spellCheck={false}
             />
             {query && <button onClick={() => setQuery('')} style={{ position:'absolute', right:14, top:'50%', transform:'translateY(-50%)', color:'rgba(148,163,184,0.5)', background:'none', border:'none', cursor:'pointer', fontSize:20, lineHeight:1 }}>×</button>}
           </div>
-          <p style={{ fontSize:9.5, color:'rgba(100,116,139,0.4)', fontWeight:600, letterSpacing:'0.08em' }}>
-            Press <kbd style={{ padding:'2px 6px', borderRadius:4, background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.1)', fontSize:9, fontFamily:'monospace' }}>/</kbd> to focus · <kbd style={{ padding:'2px 6px', borderRadius:4, background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.1)', fontSize:9, fontFamily:'monospace' }}>Esc</kbd> to clear
+          <p style={{ fontSize:9.5, color:'var(--gl-text-faint)', fontWeight:600, letterSpacing:'0.08em' }}>
+            Press <kbd style={{ padding:'2px 6px', borderRadius:4, background:'var(--gl-border)', border:'1px solid var(--gl-border)', fontSize:9, fontFamily:'monospace' }}>/</kbd> to focus · <kbd style={{ padding:'2px 6px', borderRadius:4, background:'var(--gl-border)', border:'1px solid var(--gl-border)', fontSize:9, fontFamily:'monospace' }}>Esc</kbd> to clear
           </p>
 
           {/* Quick stats */}
@@ -579,8 +607,8 @@ export default function App() {
               { n:learnedCount,                      label:'learned',    c:'#34d399' },
             ].map(s => (
               <div key={s.label} style={{ display:'flex', alignItems:'baseline', gap:4 }}>
-                <span style={{ fontSize:20, fontWeight:900, color:s.c, textShadow:`0 0 18px ${s.c}60`, fontVariantNumeric:'tabular-nums' }}>{s.n}</span>
-                <span style={{ fontSize:9.5, color:'rgba(100,116,139,0.55)', fontWeight:600, letterSpacing:'0.07em' }}>{s.label}</span>
+                <span style={{ fontSize:20, fontWeight:900, color:catInk(s.c), textShadow:`0 0 18px ${s.c}60`, fontVariantNumeric:'tabular-nums' }}>{s.n}</span>
+                <span style={{ fontSize:9.5, color:'var(--gl-text-faint)', fontWeight:600, letterSpacing:'0.07em' }}>{s.label}</span>
               </div>
             ))}
           </div>
@@ -593,18 +621,18 @@ export default function App() {
       </div>
 
       {/* ══ Category Filters (sticky) ══ */}
-      <section style={{ position:'sticky', top:84, zIndex:40, background:'rgba(4,4,10,0.93)', backdropFilter:'blur(18px)', borderBottom:'1px solid rgba(255,255,255,0.04)', padding:'10px 20px 8px' }}>
+      <section style={{ position:'sticky', top:84, zIndex:40, background:'var(--gl-nav)', backdropFilter:'blur(18px)', borderBottom:'1px solid var(--gl-surface-2)', padding:'10px 20px 8px' }}>
         <div style={{ maxWidth:1020, margin:'0 auto' }}>
           <div style={{ display:'flex', flexWrap:'wrap', gap:6, justifyContent:'center' }}>
             <button className="cat-pill" onClick={() => setActiveCategory(null)}
-              style={{ padding:'6px 14px', borderRadius:11, fontSize:10, fontWeight:900, letterSpacing:'0.06em', cursor:'pointer', border:`1.5px solid ${!activeCategory?'rgba(245,158,11,0.5)':'rgba(255,255,255,0.07)'}`, background:!activeCategory?'rgba(245,158,11,0.13)':'rgba(255,255,255,0.04)', color:!activeCategory?'#f59e0b':'rgba(100,116,139,0.8)', boxShadow:!activeCategory?'0 0 16px rgba(245,158,11,0.14)':'none', transition:'all 0.18s' }}>
+              style={{ padding:'6px 14px', borderRadius:11, fontSize:10, fontWeight:900, letterSpacing:'0.06em', cursor:'pointer', border:`1.5px solid ${!activeCategory?'rgba(245,158,11,0.5)':'var(--gl-border)'}`, background:!activeCategory?'rgba(245,158,11,0.13)':'var(--gl-surface-2)', color:!activeCategory?catInk('#f59e0b'):'var(--gl-text-faint)', boxShadow:!activeCategory?'0 0 16px rgba(245,158,11,0.14)':'none', transition:'all 0.18s' }}>
               All {TERMS.length}
             </button>
             {CATEGORIES.map(cat => {
-              const color=CATEGORY_COLORS[cat], count=TERMS.filter(t=>t.category===cat).length, active=activeCategory===cat
+              const color=catInk(CATEGORY_COLORS[cat]), count=TERMS.filter(t=>t.category===cat).length, active=activeCategory===cat
               return (
                 <button key={cat} className="cat-pill" onClick={() => setActiveCategory(active?null:cat)}
-                  style={{ padding:'6px 13px', borderRadius:11, fontSize:10, fontWeight:900, letterSpacing:'0.06em', cursor:'pointer', border:`1.5px solid ${active?color+'50':'rgba(255,255,255,0.07)'}`, background:active?`${color}17`:'rgba(255,255,255,0.04)', color:active?color:'rgba(100,116,139,0.8)', boxShadow:active?`0 0 18px ${color}18`:'none', transition:'all 0.18s', display:'flex', alignItems:'center', gap:5 }}>
+                  style={{ padding:'6px 13px', borderRadius:11, fontSize:10, fontWeight:900, letterSpacing:'0.06em', cursor:'pointer', border:`1.5px solid ${active?color+'50':'var(--gl-border)'}`, background:active?`${color}17`:'var(--gl-surface-2)', color:active?color:'var(--gl-text-faint)', boxShadow:active?`0 0 18px ${color}18`:'none', transition:'all 0.18s', display:'flex', alignItems:'center', gap:5 }}>
                   <span style={{ width:5, height:5, borderRadius:'50%', background:color, opacity:active?1:0.5, display:'inline-block', boxShadow:active?`0 0 6px ${color}`:'none' }}/>
                   {cat} <span style={{ opacity:0.55, fontSize:9 }}>{count}</span>
                 </button>
@@ -624,7 +652,7 @@ export default function App() {
               return (
                 <button key={letter} disabled={!has} className={has?'letter-btn':''}
                   onClick={() => setActiveLetter(active?null:letter)}
-                  style={{ width:28, height:28, borderRadius:8, fontSize:10, fontWeight:900, cursor:has?'pointer':'default', border:active?'1.5px solid rgba(245,158,11,0.5)':has?'1px solid rgba(255,255,255,0.08)':'1px solid transparent', background:active?'rgba(245,158,11,0.14)':has?'rgba(255,255,255,0.04)':'transparent', color:active?'#f59e0b':has?'rgba(148,163,184,0.7)':'rgba(30,41,59,0.5)', boxShadow:active?'0 0 12px rgba(245,158,11,0.18)':'none', transition:'all 0.14s' }}>
+                  style={{ width:28, height:28, borderRadius:8, fontSize:10, fontWeight:900, cursor:has?'pointer':'default', border:active?'1.5px solid rgba(245,158,11,0.5)':has?'1px solid var(--gl-border)':'1px solid transparent', background:active?'rgba(245,158,11,0.14)':has?'var(--gl-surface-2)':'transparent', color:active?catInk('#f59e0b'):has?'var(--gl-text-dim)':'var(--gl-text-faint)', boxShadow:active?'0 0 12px rgba(245,158,11,0.18)':'none', transition:'all 0.14s' }}>
                   {letter}
                 </button>
               )
@@ -636,16 +664,16 @@ export default function App() {
       {/* ══ Results header ══ */}
       <section style={{ padding:'12px 20px 10px', position:'relative', zIndex:1 }}>
         <div style={{ maxWidth:1020, margin:'0 auto', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-          <p style={{ fontSize:11, color:'rgba(100,116,139,0.65)', fontWeight:600, display:'flex', alignItems:'center', gap:6 }}>
+          <p style={{ fontSize:11, color:'var(--gl-text-faint)', fontWeight:600, display:'flex', alignItems:'center', gap:6 }}>
             <span style={{ width:5, height:5, borderRadius:'50%', background:displayed.length>0?'#34d399':'#f87171', display:'inline-block', boxShadow:`0 0 6px ${displayed.length>0?'#34d399':'#f87171'}` }}/>
             {displayed.length} result{displayed.length!==1?'s':''}
             {query && <><span style={{ opacity:0.4 }}> · </span><span style={{ color:'rgba(245,158,11,0.8)' }}>"{query}"</span></>}
             {activeCategory && <><span style={{ opacity:0.4 }}> · </span><span style={{ color:CATEGORY_COLORS[activeCategory] }}>{activeCategory}</span></>}
           </p>
           {hasFilter && (
-            <button onClick={clearFilters} style={{ fontSize:10, fontWeight:700, color:'rgba(100,116,139,0.6)', background:'none', border:'1px solid rgba(255,255,255,0.06)', cursor:'pointer', padding:'4px 10px', borderRadius:8, transition:'all 0.15s' }}
-              onMouseEnter={e => (e.currentTarget.style.color='rgba(255,255,255,0.7)')}
-              onMouseLeave={e => (e.currentTarget.style.color='rgba(100,116,139,0.6)')}
+            <button onClick={clearFilters} style={{ fontSize:10, fontWeight:700, color:'var(--gl-text-faint)', background:'none', border:'1px solid var(--gl-border)', cursor:'pointer', padding:'4px 10px', borderRadius:8, transition:'all 0.15s' }}
+              onMouseEnter={e => (e.currentTarget.style.color='var(--gl-text-dim)')}
+              onMouseLeave={e => (e.currentTarget.style.color='var(--gl-text-faint)')}
             >Clear ×</button>
           )}
         </div>
@@ -657,7 +685,7 @@ export default function App() {
           {displayed.length === 0 ? (
             <div style={{ textAlign:'center', padding:'80px 0' }} className="animate-fade-up">
               <div style={{ fontSize:44, marginBottom:16, opacity:0.5 }}>🔍</div>
-              <p style={{ fontSize:16, fontWeight:700, color:'rgba(100,116,139,0.7)', marginBottom:6 }}>No terms match</p>
+              <p style={{ fontSize:16, fontWeight:700, color:'var(--gl-text-faint)', marginBottom:6 }}>No terms match</p>
               <p style={{ fontSize:12, color:'rgba(30,41,59,0.8)' }}>Try a different search or clear filters</p>
             </div>
           ) : (
@@ -674,30 +702,30 @@ export default function App() {
       {/* ══ Category showcase ══ */}
       {!hasFilter && (
         <>
-          <div style={{ borderTop:'1px solid rgba(255,255,255,0.05)' }}/>
+          <div style={{ borderTop:'1px solid var(--gl-border)' }}/>
           <CategoryCards onSelect={setActiveCategory} active={activeCategory} />
         </>
       )}
 
       {/* ══ Stats ══ */}
-      <section style={{ borderTop:'1px solid rgba(255,255,255,0.05)', padding:'48px 20px', position:'relative', zIndex:1 }}>
+      <section style={{ borderTop:'1px solid var(--gl-border)', padding:'48px 20px', position:'relative', zIndex:1 }}>
         <div style={{ maxWidth:1020, margin:'0 auto' }}>
           <p style={{ textAlign:'center', fontSize:9, fontWeight:900, letterSpacing:'0.22em', textTransform:'uppercase', color:'rgba(100,116,139,0.25)', marginBottom:20 }}>By the numbers</p>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))', gap:10 }}>
             {[
-              { val:`${TERMS.length}`,                              label:'Terms',      color:'#f59e0b', icon:'📚' },
-              { val:`${TERMS.length}`,                              label:'Diagrams',   color:'#34d399', icon:'🎨' },
+              { val:`${TERMS.length}`,                              label:'Terms',      color:catInk('#f59e0b'), icon:'📚' },
+              { val:`${TERMS.length}`,                              label:'Diagrams',   color:catInk('#34d399'), icon:'🎨' },
               { val:`${CATEGORIES.length}`,                         label:'Categories', color:'#60a5fa', icon:'🏷️' },
               { val:`${TERMS.filter(t=>t.abbr).length}`,            label:'Abbrevs',    color:'#c084fc', icon:'🔤' },
               { val:`${TERMS.filter(t=>t.example).length}`,         label:'Examples',   color:'#f472b6', icon:'💡' },
-              { val:learnedCount > 0 ? `${learnedPct}%` : '0%',    label:'Learned',    color:'#34d399', icon:'✓' },
+              { val:learnedCount > 0 ? `${learnedPct}%` : '0%',    label:'Learned',    color:catInk('#34d399'), icon:'✓' },
             ].map(s => (
-              <div key={s.label} className="stat-card" style={{ '--accent':s.color, borderRadius:16, padding:'18px 12px', textAlign:'center', background:'rgba(5,5,14,0.97)', border:`1px solid ${s.color}18`, position:'relative', overflow:'hidden' } as React.CSSProperties}>
+              <div key={s.label} className="stat-card" style={{ '--accent':s.color, borderRadius:16, padding:'18px 12px', textAlign:'center', background:'var(--gl-surface)', border:`1px solid ${s.color}18`, position:'relative', overflow:'hidden' } as React.CSSProperties}>
                 <div style={{ position:'absolute', inset:0, background:`radial-gradient(ellipse 80% 60% at 50% 0%,${s.color}0c,transparent 70%)`, pointerEvents:'none' }}/>
                 <div style={{ position:'relative', zIndex:1 }}>
                   <div style={{ fontSize:16, marginBottom:5 }}>{s.icon}</div>
-                  <p style={{ fontWeight:900, fontSize:28, lineHeight:1, marginBottom:5, color:s.color, textShadow:`0 0 24px ${s.color}55` }}>{s.val}</p>
-                  <p style={{ fontSize:9, color:'rgba(100,116,139,0.7)', textTransform:'uppercase', letterSpacing:'0.15em', fontWeight:700 }}>{s.label}</p>
+                  <p style={{ fontWeight:900, fontSize:28, lineHeight:1, marginBottom:5, color:catInk(s.color), textShadow:`0 0 24px ${s.color}55` }}>{s.val}</p>
+                  <p style={{ fontSize:9, color:'var(--gl-text-faint)', textTransform:'uppercase', letterSpacing:'0.15em', fontWeight:700 }}>{s.label}</p>
                 </div>
               </div>
             ))}
@@ -706,43 +734,43 @@ export default function App() {
       </section>
 
       {/* ══ ICT Flow strip ══ */}
-      <section style={{ borderTop:'1px solid rgba(255,255,255,0.04)', padding:'36px 20px', position:'relative', zIndex:1 }}>
+      <section style={{ borderTop:'1px solid var(--gl-surface-2)', padding:'36px 20px', position:'relative', zIndex:1 }}>
         <div style={{ maxWidth:1020, margin:'0 auto' }}>
           <p style={{ textAlign:'center', fontSize:9, fontWeight:900, letterSpacing:'0.22em', textTransform:'uppercase', color:'rgba(100,116,139,0.25)', marginBottom:14 }}>ICT Trade Execution Flow</p>
           <div style={{ display:'flex', alignItems:'center', justifyContent:'center', flexWrap:'wrap', gap:0 }}>
             {[
-              { label:'HTF Bias',c:'#f472b6' },{label:'→',c:'rgba(255,255,255,0.15)'},
-              { label:'DOL',     c:'#60a5fa' },{label:'→',c:'rgba(255,255,255,0.15)'},
-              { label:'Session', c:'#fb923c' },{label:'→',c:'rgba(255,255,255,0.15)'},
-              { label:'Judas',   c:'#f87171' },{label:'→',c:'rgba(255,255,255,0.15)'},
-              { label:'MSS',     c:'#34d399' },{label:'→',c:'rgba(255,255,255,0.15)'},
-              { label:'POI',     c:'#f59e0b' },{label:'→',c:'rgba(255,255,255,0.15)'},
-              { label:'Entry',   c:'#c084fc' },{label:'→',c:'rgba(255,255,255,0.15)'},
+              { label:'HTF Bias',c:'#f472b6' },{label:'→',c:'var(--gl-text-faint)'},
+              { label:'DOL',     c:'#60a5fa' },{label:'→',c:'var(--gl-text-faint)'},
+              { label:'Session', c:'#fb923c' },{label:'→',c:'var(--gl-text-faint)'},
+              { label:'Judas',   c:'#f87171' },{label:'→',c:'var(--gl-text-faint)'},
+              { label:'MSS',     c:'#34d399' },{label:'→',c:'var(--gl-text-faint)'},
+              { label:'POI',     c:'#f59e0b' },{label:'→',c:'var(--gl-text-faint)'},
+              { label:'Entry',   c:'#c084fc' },{label:'→',c:'var(--gl-text-faint)'},
               { label:'Target',  c:'#14b8a6' },
             ].map((step,i) => (
-              <span key={i} style={{ fontSize:step.label==='→'?14:11, fontWeight:step.label==='→'?400:900, color:step.c, padding:step.label==='→'?'0 4px':'6px 12px', borderRadius:step.label==='→'?0:9, background:step.label==='→'?'none':`${step.c}12`, border:step.label==='→'?'none':`1px solid ${step.c}25`, letterSpacing:'0.06em' }}>
+              <span key={i} style={{ fontSize:step.label==='→'?14:11, fontWeight:step.label==='→'?400:900, color:catInk(step.c), padding:step.label==='→'?'0 4px':'6px 12px', borderRadius:step.label==='→'?0:9, background:step.label==='→'?'none':`${step.c}12`, border:step.label==='→'?'none':`1px solid ${step.c}25`, letterSpacing:'0.06em' }}>
                 {step.label}
               </span>
             ))}
           </div>
           <p style={{ textAlign:'center', fontSize:11, color:'rgba(100,116,139,0.38)', marginTop:12, lineHeight:1.7 }}>
-            Click <kbd style={{ padding:'2px 6px', borderRadius:4, background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.08)', fontSize:9 }}>/</kbd> and type any step above to explore it.
+            Click <kbd style={{ padding:'2px 6px', borderRadius:4, background:'var(--gl-border)', border:'1px solid var(--gl-border)', fontSize:9 }}>/</kbd> and type any step above to explore it.
           </p>
         </div>
       </section>
 
       {/* ══ Footer ══ */}
-      <footer style={{ borderTop:'1px solid rgba(255,255,255,0.04)', padding:'28px 20px 40px', position:'relative', zIndex:1 }}>
+      <footer style={{ borderTop:'1px solid var(--gl-surface-2)', padding:'28px 20px 40px', position:'relative', zIndex:1 }}>
         <div style={{ maxWidth:1020, margin:'0 auto', display:'flex', flexDirection:'column', alignItems:'center', gap:12 }}>
           <div style={{ display:'flex', alignItems:'center', gap:8 }}>
             <div style={{ width:24, height:24, borderRadius:7, display:'flex', alignItems:'center', justifyContent:'center', fontSize:12, background:'rgba(245,158,11,0.1)', border:'1px solid rgba(245,158,11,0.2)' }}>📖</div>
-            <span style={{ fontSize:11, fontWeight:900, letterSpacing:'0.18em', textTransform:'uppercase', color:'rgba(100,116,139,0.4)' }}>ICT Glossary</span>
+            <span style={{ fontSize:11, fontWeight:900, letterSpacing:'0.18em', textTransform:'uppercase', color:'var(--gl-text-faint)' }}>ICT Glossary</span>
             <span style={{ width:3, height:3, borderRadius:'50%', background:'rgba(245,158,11,0.3)', display:'inline-block' }}/>
-            <span style={{ fontSize:10, fontWeight:700, color:'rgba(245,158,11,0.3)' }}>a Chronic Trading tool</span>
+            <span style={{ fontSize:10, fontWeight:700, color:'var(--gl-text-faint)' }}>a Chronic Trading tool</span>
           </div>
           <div style={{ display:'flex', gap:12, flexWrap:'wrap', justifyContent:'center' }}>
             {CATEGORIES.map(cat => (
-              <span key={cat} style={{ fontSize:8, color:`${CATEGORY_COLORS[cat]}45`, fontWeight:900, letterSpacing:'0.1em', textTransform:'uppercase' }}>{cat.split(' ')[0]}</span>
+              <span key={cat} style={{ fontSize:8, color:`${catInk(CATEGORY_COLORS[cat])}72`, fontWeight:900, letterSpacing:'0.1em', textTransform:'uppercase' }}>{cat.split(' ')[0]}</span>
             ))}
           </div>
           <p style={{ fontSize:10, color:'rgba(30,41,59,0.9)' }}>Educational reference only — not financial advice.</p>
