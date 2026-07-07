@@ -73,7 +73,7 @@ export function MarketStructureDiagram() {
     <Base>
       <path d={path} stroke="#34d399" strokeWidth="2" fill="none" />
       {[[45,68,'HH'],[110,35,'HH'],[180,18,'HH']].map(([x,y,l]) => (
-        <g key={String(l)}><circle cx={x as number} cy={y as number} r="3" fill="#34d399" /><Label x={x as number} y={(y as number)-7} text={String(l)} color="#34d399" size={7}/></g>
+        <g key={String(l)+x}><circle cx={x as number} cy={y as number} r="3" fill="#34d399" /><Label x={x as number} y={(y as number)-7} text={String(l)} color="#34d399" size={7}/></g>
       ))}
       {[[65,82,'HL'],[135,52,'HL']].map(([x,y,l]) => (
         <g key={String(l)+x}><circle cx={x as number} cy={y as number} r="3" fill="#60a5fa" /><Label x={x as number} y={(y as number)+12} text={String(l)} color="#60a5fa" size={7}/></g>
