@@ -115,6 +115,7 @@ export const TERMS: Term[] = [
     category: 'Market Structure',
     diagramId: 'relative-equal-highs',
     definition: 'Highs that are close to the same price but not perfectly aligned. They still attract stop orders from retail traders and function as a liquidity target, though less precisely than perfect equal highs. ICT treats REH as a softer draw on liquidity.',
+    example: 'NQ prints a swing high at 18,450, then a second high at 18,452 — close but not exact. Retail reads it as a double top and shorts, stacking buy stops just above. In the NY AM kill zone price reaches up and grabs those stops before reversing. Treat REH as a magnet, not resistance: wait for the sweep, then trade the reversal from a PD array on the other side.',
     related: ['Equal Highs', 'Buy Side Liquidity', 'Liquidity Pool'],
   },
   {
@@ -124,6 +125,7 @@ export const TERMS: Term[] = [
     category: 'Market Structure',
     diagramId: 'relative-equal-lows',
     definition: 'Lows that are close but not perfectly equal. They still represent a liquidity pool and act as a draw on price. ICT uses these as targets when seeking stop runs below recent structure, though they carry slightly less significance than exact equal lows.',
+    example: 'ES makes a low at 5,290.00, then a second low at 5,289.75 — relatively equal. Sell stops build just beneath both. London dips through them to 5,289.25 and snaps back — a clean stop run below the REL. Don\'t treat the level as support: let the sweep happen, then enter long on the reclaim back above the lows.',
     related: ['Equal Lows', 'Sell Side Liquidity', 'Liquidity Pool'],
   },
   {
@@ -529,6 +531,7 @@ export const TERMS: Term[] = [
     category: 'Price Delivery',
     diagramId: 'retest',
     definition: 'When price returns to a previously broken structure level, order block, or FVG after initially moving away from it. A retest is both a confirmation and an entry opportunity. A successful retest of a bullish order block (price returns, holds, continues up) provides a secondary entry with high confidence.',
+    example: 'Price displaces up through a swing high (BOS), leaving a bullish order block behind. Rather than chasing the breakout, you wait: price pulls back and retests the OB, wicks into it, and holds. That retest is the entry — risk defined just below the OB, with the BOS already confirming the direction. No retest, no trade.',
     related: ['Order Block', 'Break of Structure', 'Level Reclaim', 'Rebalancing'],
   },
   {
