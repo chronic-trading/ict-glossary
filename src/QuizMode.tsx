@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from 'react'
+import { Zap, Check, X } from 'lucide-react'
 import { TERMS, CATEGORY_COLORS, type Term } from './terms'
 import { DIAGRAMS } from './diagrams'
 
@@ -86,11 +87,11 @@ export function QuizMode({ onClose }: { onClose: () => void }) {
         {/* Header */}
         <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:16 }}>
           <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-            <span style={{ fontSize:11, fontWeight:900, letterSpacing:'0.2em', color:catInk('#f59e0b') }}>⚡ DIAGRAM QUIZ</span>
+            <span style={{ fontSize:11, fontWeight:900, letterSpacing:'0.2em', color:catInk('#f59e0b'), display:'inline-flex', alignItems:'center', gap:6 }}><Zap size={13} strokeWidth={2.5} /> DIAGRAM QUIZ</span>
             {!finished && <span style={{ fontSize:10, color:'var(--gl-text-faint)', fontWeight:700 }}>{qi + 1} / {round.length}</span>}
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-            <span style={{ fontSize:11, fontWeight:900, color:catInk('#34d399'), fontVariantNumeric:'tabular-nums' }}>✓ {score}</span>
+            <span style={{ fontSize:11, fontWeight:900, color:catInk('#34d399'), fontVariantNumeric:'tabular-nums', display:'inline-flex', alignItems:'center', gap:4 }}><Check size={12} strokeWidth={3} /> {score}</span>
             {best > 0 && <span style={{ fontSize:10, fontWeight:700, color:catInk('#f59e0b') }}>Best {best}/{ROUND_SIZE}</span>}
             <button onClick={onClose} style={{ fontSize:12, fontWeight:700, color:'var(--gl-text-dim)', background:'var(--gl-border)', border:'1px solid var(--gl-border)', borderRadius:8, padding:'5px 12px', cursor:'pointer' }}>
               ✕ Close
@@ -140,14 +141,14 @@ export function QuizMode({ onClose }: { onClose: () => void }) {
                   <button key={opt.id} onClick={() => pick(opt.id)}
                     style={{
                       padding:'13px 14px', borderRadius:13, textAlign:'left', cursor: picked ? 'default' : 'pointer',
-                      fontSize:12.5, fontWeight:700, transition:'all 0.15s',
+                      fontSize: 13, fontWeight:700, transition:'all 0.15s',
                       background: isCorrect ? 'rgba(52,211,153,0.12)' : isWrong ? 'rgba(248,113,113,0.12)' : 'var(--gl-surface-2)',
                       border: `1.5px solid ${isCorrect ? 'rgba(52,211,153,0.5)' : isWrong ? 'rgba(248,113,113,0.5)' : 'var(--gl-border)'}`,
                       color: isCorrect ? catInk('#34d399') : isWrong ? catInk('#f87171') : 'var(--gl-text)',
                     }}>
                     {opt.term}{opt.abbr ? ` (${opt.abbr})` : ''}
-                    {isCorrect ? ' ✓' : isWrong ? ' ✗' : ''}
-                    {!picked && <span style={{ display:'block', fontSize:8.5, fontWeight:900, letterSpacing:'0.14em', textTransform:'uppercase', color:`${catInk(oc)}b0`, marginTop:3 }}>{opt.category}</span>}
+                    {isCorrect ? <Check size={12} strokeWidth={3} style={{ display:'inline', verticalAlign:'-2px', marginLeft:4 }} /> : isWrong ? <X size={12} strokeWidth={3} style={{ display:'inline', verticalAlign:'-2px', marginLeft:4 }} /> : ''}
+                    {!picked && <span style={{ display:'block', fontSize: 10, fontWeight:900, letterSpacing:'0.14em', textTransform:'uppercase', color:`${catInk(oc)}b0`, marginTop:3 }}>{opt.category}</span>}
                   </button>
                 )
               })}
@@ -157,7 +158,7 @@ export function QuizMode({ onClose }: { onClose: () => void }) {
               <div style={{ marginTop:14 }}>
                 <div style={{ padding:'12px 14px', borderRadius:13, background:`${color}0a`, border:`1px solid ${color}22`, marginBottom:12 }}>
                   <p style={{ fontSize:10, fontWeight:900, letterSpacing:'0.16em', textTransform:'uppercase', color, marginBottom:5 }}>{q.term.term}</p>
-                  <p style={{ fontSize:11.5, color:'var(--gl-text-dim)', lineHeight:1.6 }}>{q.term.definition}</p>
+                  <p style={{ fontSize: 12, color:'var(--gl-text-dim)', lineHeight:1.6 }}>{q.term.definition}</p>
                 </div>
                 <button onClick={next}
                   style={{ width:'100%', padding:'13px', borderRadius:14, fontSize:13, fontWeight:900, background:'linear-gradient(135deg,#f59e0b,#d97706)', color:'#0a0800', border:'none', cursor:'pointer' }}>

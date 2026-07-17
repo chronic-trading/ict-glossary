@@ -1,5 +1,10 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react'
 import {
+  TrendingUp, Droplet, Target, Blocks, Clock, RefreshCw, Brain,
+  Check, Link, Circle, Zap, BookOpen, Palette, Tag, Type, Lightbulb,
+  type LucideIcon,
+} from 'lucide-react'
+import {
   TERMS, CATEGORIES, CATEGORY_COLORS, searchTerms,
   ALL_LETTERS, type Term, type Category,
 } from './terms'
@@ -35,10 +40,16 @@ function catInk(hex: string): string {
 }
 
 // ── Category metadata ─────────────────────────────────────────────────────────
-const CAT_ICONS: Record<string, string> = {
-  'Market Structure': '📈', 'Liquidity': '💧', 'Price Delivery': '🎯',
-  'Order Blocks': '🧱',    'Sessions & Time': '⏱', 'AMD & Bias': '🔄',
-  'SMC & Models': '🧠',
+// Category icons use the shared lucide set, so the glossary reads like the rest
+// of the suite rather than an emoji picker.
+const CAT_ICON: Record<string, LucideIcon> = {
+  'Market Structure': TrendingUp, 'Liquidity': Droplet, 'Price Delivery': Target,
+  'Order Blocks': Blocks,        'Sessions & Time': Clock, 'AMD & Bias': RefreshCw,
+  'SMC & Models': Brain,
+}
+function CatIcon({ cat, size, strokeWidth = 1.75, style }: { cat: string; size: number; strokeWidth?: number; style?: React.CSSProperties }) {
+  const I = CAT_ICON[cat] ?? Target
+  return <I size={size} strokeWidth={strokeWidth} style={style} />
 }
 const CAT_SHORT: Record<string, string> = {
   'Market Structure': 'STRUCTURE', 'Liquidity': 'LIQUIDITY',
@@ -169,8 +180,8 @@ function DailyTermBanner({ onSearch }: { onSearch: (q: string) => void }) {
               </button>
             )}
             {expanded && term.example && (
-              <div style={{ marginTop: 12, padding: '10px 12px', borderRadius: 12, background: `${color}08`, border: `1px solid ${color}18`, fontSize: 11.5, color: 'var(--gl-text-dim)', lineHeight: 1.65 }}>
-                <span style={{ display: 'block', fontSize: 8.5, fontWeight: 900, letterSpacing: '0.18em', textTransform: 'uppercase', color, marginBottom: 6 }}>Example</span>
+              <div style={{ marginTop: 12, padding: '10px 12px', borderRadius: 12, background: `${color}08`, border: `1px solid ${color}18`, fontSize: 12, color: 'var(--gl-text-dim)', lineHeight: 1.65 }}>
+                <span style={{ display: 'block', fontSize: 10, fontWeight: 900, letterSpacing: '0.18em', textTransform: 'uppercase', color, marginBottom: 6 }}>Example</span>
                 {term.example}
               </div>
             )}
@@ -245,13 +256,13 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
       {/* Diagram */}
       <div className="diagram-frame" style={{ background:`linear-gradient(160deg,${color}0e 0%,${color}03 50%,rgba(4,4,8,1) 80%)`, borderBottom:`1px solid ${color}14`, position:'relative' }}>
         <div style={{ position:'absolute', top:8, right:8, zIndex:3, display:'flex', gap:5, alignItems:'center' }}>
-          {learned && <span style={{ fontSize:7.5, background:'rgba(52,211,153,0.15)', color:catInk('#34d399'), border:'1px solid rgba(52,211,153,0.3)', borderRadius:5, padding:'2px 6px', fontWeight:900, letterSpacing:'0.1em' }}>✓ LEARNED</span>}
+          {learned && <span style={{ fontSize:10, background:'rgba(52,211,153,0.15)', color:catInk('#34d399'), border:'1px solid rgba(52,211,153,0.3)', borderRadius:5, padding:'2px 6px', fontWeight:900, letterSpacing:'0.1em', display:'inline-flex', alignItems:'center', gap:4 }}><Check size={11} strokeWidth={3} /> LEARNED</span>}
           <span style={{ fontSize:7, fontWeight:900, letterSpacing:'0.14em', padding:'3px 7px', borderRadius:6, background:`${color}14`, color, border:`1px solid ${color}28`, textTransform:'uppercase' }}>
             {CAT_SHORT[term.category]}
           </span>
         </div>
         <div style={{ position:'relative', zIndex:1 }}>
-          {DiagramComp ? <DiagramComp /> : <div style={{ height:80, display:'flex', alignItems:'center', justifyContent:'center' }}><span style={{ fontSize:28, opacity:0.25 }}>{CAT_ICONS[term.category]}</span></div>}
+          {DiagramComp ? <DiagramComp /> : <div style={{ height:80, display:'flex', alignItems:'center', justifyContent:'center', opacity:0.25, color }}><CatIcon cat={term.category} size={30} /></div>}
         </div>
         <div style={{ position:'absolute', bottom:0, left:0, right:0, height:20, background:`linear-gradient(transparent,rgba(5,5,12,0.6))`, zIndex:2, pointerEvents:'none' }}/>
       </div>
@@ -266,21 +277,21 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
             <button
               onClick={copyLink}
               title={copied ? 'Link copied!' : 'Copy link to this term'}
-              style={{ fontSize:11, background:'none', border:'none', cursor:'pointer', padding:'2px 3px', borderRadius:6, lineHeight:1, opacity: copied ? 1 : 0.3, transition:'opacity 0.2s, transform 0.15s', color: copied ? '#34d399' : 'var(--gl-text-dim)' }}
+              style={{ display:'flex', alignItems:'center', background:'none', border:'none', cursor:'pointer', padding:'3px', borderRadius:6, lineHeight:1, opacity: copied ? 1 : 0.3, transition:'opacity 0.2s, transform 0.15s', color: copied ? '#34d399' : 'var(--gl-text-dim)' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity='1'; (e.currentTarget as HTMLElement).style.transform='scale(1.15)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity=copied?'1':'0.3'; (e.currentTarget as HTMLElement).style.transform='scale(1)' }}
             >
-              {copied ? '✓' : '🔗'}
+              {copied ? <Check size={13} strokeWidth={3} /> : <Link size={13} strokeWidth={2} />}
             </button>
             {/* Learned toggle */}
             <button
               onClick={e => { e.stopPropagation(); onToggleLearned(term.id) }}
               title={learned ? 'Mark as unlearned' : 'Mark as learned'}
-              style={{ fontSize:14, background:'none', border:'none', cursor:'pointer', padding:'2px 3px', borderRadius:6, lineHeight:1, opacity: learned ? 1 : 0.25, transition:'opacity 0.2s, transform 0.15s', color: learned ? '#34d399' : 'rgba(148,163,184,0.6)' }}
+              style={{ display:'flex', alignItems:'center', background:'none', border:'none', cursor:'pointer', padding:'3px', borderRadius:6, lineHeight:1, opacity: learned ? 1 : 0.25, transition:'opacity 0.2s, transform 0.15s', color: learned ? '#34d399' : 'rgba(148,163,184,0.6)' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity='1'; (e.currentTarget as HTMLElement).style.transform='scale(1.2)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity=learned?'1':'0.25'; (e.currentTarget as HTMLElement).style.transform='scale(1)' }}
             >
-              {learned ? '✓' : '○'}
+              {learned ? <Check size={14} strokeWidth={3} /> : <Circle size={14} strokeWidth={2} />}
             </button>
           </div>
         </div>
@@ -304,19 +315,19 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
         {expanded && (
           <div className="expand-content" style={{ marginTop:12, borderTop:`1px solid ${color}14`, paddingTop:12 }}>
             {term.example && (
-              <div style={{ padding:'10px 12px', borderRadius:12, marginBottom:10, background:`${color}08`, border:`1px solid ${color}18`, fontSize:11.5, color:'var(--gl-text-dim)', lineHeight:1.65 }}>
-                <span style={{ display:'block', fontSize:8.5, fontWeight:900, letterSpacing:'0.18em', textTransform:'uppercase', color, marginBottom:6 }}>Example</span>
+              <div style={{ padding:'10px 12px', borderRadius:12, marginBottom:10, background:`${color}08`, border:`1px solid ${color}18`, fontSize: 12, color:'var(--gl-text-dim)', lineHeight:1.65 }}>
+                <span style={{ display:'block', fontSize: 10, fontWeight:900, letterSpacing:'0.18em', textTransform:'uppercase', color, marginBottom:6 }}>Example</span>
                 {term.example}
               </div>
             )}
             {term.related.length > 0 && (
               <div>
-                <p style={{ fontSize:8.5, fontWeight:900, letterSpacing:'0.2em', textTransform:'uppercase', color:`${color}55`, marginBottom:8 }}>Related</p>
+                <p style={{ fontSize: 10, fontWeight:900, letterSpacing:'0.2em', textTransform:'uppercase', color:`${color}55`, marginBottom:8 }}>Related</p>
                 <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
                   {term.related.map(r => (
                     <button key={r} className="related-tag"
                       onClick={e => { e.stopPropagation(); onRelatedClick(r) }}
-                      style={{ padding:'5px 11px', borderRadius:9, fontSize:10.5, fontWeight:700, background:`${color}10`, color, border:`1px solid ${color}28`, cursor:'pointer', display:'flex', alignItems:'center', gap:4 }}>
+                      style={{ padding:'5px 11px', borderRadius:9, fontSize:11, fontWeight:700, background:`${color}10`, color, border:`1px solid ${color}28`, cursor:'pointer', display:'flex', alignItems:'center', gap:4 }}>
                       {r} <span style={{ opacity:0.6, fontSize:9 }}>→</span>
                     </button>
                   ))}
@@ -352,9 +363,9 @@ function CategoryCards({ onSelect, active }: { onSelect: (c: Category | null) =>
                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform='translateY(-2px)'; (e.currentTarget as HTMLElement).style.boxShadow=`0 12px 40px ${color}18, 0 0 0 1px ${color}30` }}
                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform=''; (e.currentTarget as HTMLElement).style.boxShadow=isActive?`0 0 32px ${color}18`:'' }}>
                 <div style={{ position:'absolute', top:0, left:0, right:0, height:1, background:`linear-gradient(90deg,transparent,${color},transparent)`, opacity:0.6 }}/>
-                <div style={{ position:'absolute', right:12, top:10, fontSize:42, opacity:0.06, pointerEvents:'none' }}>{CAT_ICONS[cat]}</div>
+                <div style={{ position:'absolute', right:12, top:10, opacity:0.06, pointerEvents:'none', color }}><CatIcon cat={cat} size={42} /></div>
                 <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:12 }}>
-                  <div style={{ width:36, height:36, borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontSize:18, background:`${color}15`, border:`1px solid ${color}28`, flexShrink:0 }}>{CAT_ICONS[cat]}</div>
+                  <div style={{ width:36, height:36, borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', color, background:`${color}15`, border:`1px solid ${color}28`, flexShrink:0 }}><CatIcon cat={cat} size={18} /></div>
                   <div>
                     <p style={{ fontSize:13, fontWeight:900, color:'var(--gl-text)', lineHeight:1.2 }}>{cat}</p>
                     <p style={{ fontSize:10, color, fontWeight:700, opacity:0.8 }}>{count} concepts</p>
@@ -519,10 +530,10 @@ export default function App() {
             )}
             <div style={{ width:1, height:14, background:'var(--gl-border)' }}/>
             <button onClick={() => setQuizOpen(true)}
-              style={{ fontSize:9, fontWeight:900, letterSpacing:'0.1em', padding:'4px 10px', borderRadius:7, background:'rgba(245,158,11,0.1)', color:catInk('#f59e0b'), border:'1px solid rgba(245,158,11,0.25)', cursor:'pointer', transition:'all 0.15s' }}
+              style={{ fontSize:9, fontWeight:900, letterSpacing:'0.1em', padding:'4px 10px', borderRadius:7, background:'rgba(245,158,11,0.1)', color:catInk('#f59e0b'), border:'1px solid rgba(245,158,11,0.25)', cursor:'pointer', transition:'all 0.15s', display:'inline-flex', alignItems:'center', gap:5 }}
               onMouseEnter={e => (e.currentTarget.style.background='rgba(245,158,11,0.18)')}
               onMouseLeave={e => (e.currentTarget.style.background='rgba(245,158,11,0.1)')}>
-              ⚡ QUIZ
+              <Zap size={11} strokeWidth={2.5} /> QUIZ
             </button>
             {signedIn && (
               <div title="Signed in — your learned terms sync across your Chronic Trading account" style={{ display:'flex', alignItems:'center', gap:4, fontSize:9, fontWeight:800, letterSpacing:'0.06em', padding:'4px 8px', borderRadius:7, background:'rgba(52,211,153,0.08)', color:catInk('#34d399'), border:'1px solid rgba(52,211,153,0.22)' }}>
@@ -549,14 +560,14 @@ export default function App() {
           {CATEGORIES.slice(0,4).map(cat => (
             <div key={cat} style={{ display:'flex', alignItems:'center', gap:6 }}>
               <div style={{ width:18, height:1, background:CATEGORY_COLORS[cat], opacity:0.6 }}/>
-              <span style={{ fontSize:7.5, fontWeight:900, letterSpacing:'0.14em', color:catInk(CATEGORY_COLORS[cat]), textTransform:'uppercase', opacity:0.65, whiteSpace:'nowrap' }}>{cat.split(' ')[0]}</span>
+              <span style={{ fontSize:10, fontWeight:900, letterSpacing:'0.14em', color:catInk(CATEGORY_COLORS[cat]), textTransform:'uppercase', opacity:0.65, whiteSpace:'nowrap' }}>{cat.split(' ')[0]}</span>
             </div>
           ))}
         </div>
         <div className="hero-side" style={{ position:'absolute', right:'2%', top:'15%', bottom:'15%', width:'130px', pointerEvents:'none', flexDirection:'column', justifyContent:'space-evenly', alignItems:'flex-end', opacity:0.55 }}>
           {CATEGORIES.slice(3).map(cat => (
             <div key={cat} style={{ display:'flex', alignItems:'center', gap:6 }}>
-              <span style={{ fontSize:7.5, fontWeight:900, letterSpacing:'0.14em', color:catInk(CATEGORY_COLORS[cat]), textTransform:'uppercase', opacity:0.65, whiteSpace:'nowrap' }}>{cat.split(' ')[0]}</span>
+              <span style={{ fontSize:10, fontWeight:900, letterSpacing:'0.14em', color:catInk(CATEGORY_COLORS[cat]), textTransform:'uppercase', opacity:0.65, whiteSpace:'nowrap' }}>{cat.split(' ')[0]}</span>
               <div style={{ width:18, height:1, background:CATEGORY_COLORS[cat], opacity:0.6 }}/>
             </div>
           ))}
@@ -593,7 +604,7 @@ export default function App() {
             />
             {query && <button onClick={() => setQuery('')} style={{ position:'absolute', right:14, top:'50%', transform:'translateY(-50%)', color:'rgba(148,163,184,0.5)', background:'none', border:'none', cursor:'pointer', fontSize:20, lineHeight:1 }}>×</button>}
           </div>
-          <p style={{ fontSize:9.5, color:'var(--gl-text-faint)', fontWeight:600, letterSpacing:'0.08em' }}>
+          <p style={{ fontSize: 10, color:'var(--gl-text-faint)', fontWeight:600, letterSpacing:'0.08em' }}>
             Press <kbd style={{ padding:'2px 6px', borderRadius:4, background:'var(--gl-border)', border:'1px solid var(--gl-border)', fontSize:9, fontFamily:'monospace' }}>/</kbd> to focus · <kbd style={{ padding:'2px 6px', borderRadius:4, background:'var(--gl-border)', border:'1px solid var(--gl-border)', fontSize:9, fontFamily:'monospace' }}>Esc</kbd> to clear
           </p>
 
@@ -608,7 +619,7 @@ export default function App() {
             ].map(s => (
               <div key={s.label} style={{ display:'flex', alignItems:'baseline', gap:4 }}>
                 <span style={{ fontSize:20, fontWeight:900, color:catInk(s.c), textShadow:`0 0 18px ${s.c}60`, fontVariantNumeric:'tabular-nums' }}>{s.n}</span>
-                <span style={{ fontSize:9.5, color:'var(--gl-text-faint)', fontWeight:600, letterSpacing:'0.07em' }}>{s.label}</span>
+                <span style={{ fontSize: 10, color:'var(--gl-text-faint)', fontWeight:600, letterSpacing:'0.07em' }}>{s.label}</span>
               </div>
             ))}
           </div>
@@ -713,22 +724,24 @@ export default function App() {
           <p style={{ textAlign:'center', fontSize:9, fontWeight:900, letterSpacing:'0.22em', textTransform:'uppercase', color:'rgba(100,116,139,0.25)', marginBottom:20 }}>By the numbers</p>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))', gap:10 }}>
             {[
-              { val:`${TERMS.length}`,                              label:'Terms',      color:catInk('#f59e0b'), icon:'📚' },
-              { val:`${TERMS.length}`,                              label:'Diagrams',   color:catInk('#34d399'), icon:'🎨' },
-              { val:`${CATEGORIES.length}`,                         label:'Categories', color:'#60a5fa', icon:'🏷️' },
-              { val:`${TERMS.filter(t=>t.abbr).length}`,            label:'Abbrevs',    color:'#c084fc', icon:'🔤' },
-              { val:`${TERMS.filter(t=>t.example).length}`,         label:'Examples',   color:'#f472b6', icon:'💡' },
-              { val:learnedCount > 0 ? `${learnedPct}%` : '0%',    label:'Learned',    color:catInk('#34d399'), icon:'✓' },
-            ].map(s => (
+              { val:`${TERMS.length}`,                              label:'Terms',      color:catInk('#f59e0b'), icon:BookOpen },
+              { val:`${TERMS.length}`,                              label:'Diagrams',   color:catInk('#34d399'), icon:Palette },
+              { val:`${CATEGORIES.length}`,                         label:'Categories', color:'#60a5fa', icon:Tag },
+              { val:`${TERMS.filter(t=>t.abbr).length}`,            label:'Abbrevs',    color:'#c084fc', icon:Type },
+              { val:`${TERMS.filter(t=>t.example).length}`,         label:'Examples',   color:'#f472b6', icon:Lightbulb },
+              { val:learnedCount > 0 ? `${learnedPct}%` : '0%',    label:'Learned',    color:catInk('#34d399'), icon:Check },
+            ].map(s => {
+              const Ic = s.icon
+              return (
               <div key={s.label} className="stat-card" style={{ '--accent':s.color, borderRadius:16, padding:'18px 12px', textAlign:'center', background:'var(--gl-surface)', border:`1px solid ${s.color}18`, position:'relative', overflow:'hidden' } as React.CSSProperties}>
                 <div style={{ position:'absolute', inset:0, background:`radial-gradient(ellipse 80% 60% at 50% 0%,${s.color}0c,transparent 70%)`, pointerEvents:'none' }}/>
                 <div style={{ position:'relative', zIndex:1 }}>
-                  <div style={{ fontSize:16, marginBottom:5 }}>{s.icon}</div>
+                  <div style={{ marginBottom:6, color:s.color, display:'flex', justifyContent:'center' }}><Ic size={18} strokeWidth={1.75} /></div>
                   <p style={{ fontWeight:900, fontSize:28, lineHeight:1, marginBottom:5, color:catInk(s.color), textShadow:`0 0 24px ${s.color}55` }}>{s.val}</p>
                   <p style={{ fontSize:9, color:'var(--gl-text-faint)', textTransform:'uppercase', letterSpacing:'0.15em', fontWeight:700 }}>{s.label}</p>
                 </div>
               </div>
-            ))}
+            )})}
           </div>
         </div>
       </section>

@@ -55,6 +55,29 @@ body {
 ::-webkit-scrollbar-thumb { background: rgba(245,158,11,0.25); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(245,158,11,0.45); }
 
+/* ── Finishing touches — kept in sync with trading-lab / ict-replay ──────────── */
+
+/* Keyboard focus ring — only for keyboard nav, never on mouse click. */
+:focus-visible {
+  outline: 2px solid #f59e0b;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* Themed text selection */
+::selection { background: color-mix(in srgb, #f59e0b 24%, transparent); color: var(--gl-text); }
+
+/* Respect the OS "reduce motion" setting. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* ── Keyframes ───────────────────────────────────────────────────────────────── */
 
 @keyframes fade-up {
