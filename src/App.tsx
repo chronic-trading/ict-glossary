@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react'
 import {
   TrendingUp, Droplet, Target, Blocks, Clock, RefreshCw, Brain,
-  Check, Link, Circle, Zap, BookOpen, Palette, Tag, Type, Lightbulb,
+  Check, Link, Circle, Zap, BookOpen, Palette, Tag, Type, Lightbulb, Moon, Sun,
   type LucideIcon,
 } from 'lucide-react'
 import {
@@ -20,8 +20,8 @@ function ThemeToggle() {
   return (
     <button onClick={toggle} title={theme === 'light' ? 'Switch to dark' : 'Switch to light'} aria-label="Toggle theme"
       style={{ display:'flex', alignItems:'center', justifyContent:'center', width:28, height:28, borderRadius:7, cursor:'pointer',
-        background:'var(--gl-surface-2)', border:'1px solid var(--gl-border)', color:'var(--gl-text-dim)', fontSize:13 }}>
-      {theme === 'light' ? '🌙' : '☀️'}
+        background:'var(--gl-surface-2)', border:'1px solid var(--gl-border)', color:'var(--gl-text-dim)' }}>
+      {theme === 'light' ? <Moon size={14} strokeWidth={2} /> : <Sun size={14} strokeWidth={2} />}
     </button>
   )
 }
