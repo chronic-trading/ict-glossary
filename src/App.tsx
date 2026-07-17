@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useEffect, useCallback } from 'react'
 import {
   TrendingUp, Droplet, Target, Blocks, Clock, RefreshCw, Brain,
   Check, Link, Circle, Zap, BookOpen, Palette, Tag, Type, Lightbulb, Moon, Sun,
+  Search, Sparkles, ChevronDown,
   type LucideIcon,
 } from 'lucide-react'
 import {
@@ -143,8 +144,8 @@ function DailyTermBanner({ onSearch }: { onSearch: (q: string) => void }) {
       }}>
         <div style={{ padding: '16px 20px 0', display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.22em', textTransform: 'uppercase', padding: '3px 10px', borderRadius: 7, background: `${color}18`, color, border: `1px solid ${color}28` }}>
-              ✦ Term of the Day
+            <span style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.22em', textTransform: 'uppercase', padding: '3px 10px', borderRadius: 7, background: `${color}18`, color, border: `1px solid ${color}28`, display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+              <Sparkles size={10} strokeWidth={2.5} /> Term of the Day
             </span>
             <span style={{ fontSize: 10, color: 'var(--gl-text-faint)', fontWeight: 600 }}>
               {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
@@ -308,7 +309,7 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
         <div style={{ display:'flex', justifyContent:'flex-end', marginTop:8 }}>
           <span style={{ fontSize:9, fontWeight:900, letterSpacing:'0.1em', textTransform:'uppercase', color:`${color}65`, display:'flex', alignItems:'center', gap:3 }}>
             {expanded ? 'Less' : 'Details'}
-            <span style={{ display:'inline-block', transform:expanded?'rotate(180deg)':'none', transition:'transform 0.25s cubic-bezier(.34,1.56,.64,1)' }}>▾</span>
+            <span style={{ display:'inline-flex', transform:expanded?'rotate(180deg)':'none', transition:'transform 0.25s cubic-bezier(.34,1.56,.64,1)' }}><ChevronDown size={12} strokeWidth={2.5} /></span>
           </span>
         </div>
 
@@ -513,7 +514,7 @@ export default function App() {
         <Ticker />
         <div style={{ maxWidth:1020, margin:'0 auto', padding:'0 20px', height:50, display:'flex', alignItems:'center', justifyContent:'space-between' }}>
           <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-            <div style={{ width:30, height:30, borderRadius:9, display:'flex', alignItems:'center', justifyContent:'center', fontSize:14, background:'rgba(245,158,11,0.12)', border:'1px solid rgba(245,158,11,0.28)', boxShadow:'0 0 12px rgba(245,158,11,0.12)' }}>📖</div>
+            <div style={{ width:30, height:30, borderRadius:9, display:'flex', alignItems:'center', justifyContent:'center', color:catInk('#f59e0b'), background:'rgba(245,158,11,0.12)', border:'1px solid rgba(245,158,11,0.28)', boxShadow:'0 0 12px rgba(245,158,11,0.12)' }}><BookOpen size={15} strokeWidth={2} /></div>
             <div style={{ display:'flex', alignItems:'baseline', gap:7 }}>
               <span style={{ fontSize:12, fontWeight:900, letterSpacing:'0.2em', color:'var(--gl-text)' }}>ICT GLOSSARY</span>
               <span style={{ fontSize:9, fontWeight:700, letterSpacing:'0.12em', textTransform:'uppercase', color:'var(--gl-text-faint)' }}>by Chronic Trading</span>
@@ -593,8 +594,8 @@ export default function App() {
 
           {/* Search */}
           <div style={{ position:'relative', maxWidth:540, margin:'0 auto 12px' }}>
-            <span style={{ position:'absolute', left:18, top:'50%', transform:'translateY(-50%)', color:query?'rgba(245,158,11,0.7)':'var(--gl-text-faint)', fontSize:16, pointerEvents:'none', transition:'color 0.2s' }}>
-              {query ? '✦' : '⌕'}
+            <span style={{ position:'absolute', left:18, top:'50%', transform:'translateY(-50%)', color:query?'rgba(245,158,11,0.7)':'var(--gl-text-faint)', pointerEvents:'none', transition:'color 0.2s', display:'flex', alignItems:'center' }}>
+              <Search size={15} strokeWidth={2} />
             </span>
             <input ref={searchRef} className="search-input" value={query}
               onChange={e => { setQuery(e.target.value); setActiveLetter(null) }}
@@ -776,7 +777,7 @@ export default function App() {
       <footer style={{ borderTop:'1px solid var(--gl-surface-2)', padding:'28px 20px 40px', position:'relative', zIndex:1 }}>
         <div style={{ maxWidth:1020, margin:'0 auto', display:'flex', flexDirection:'column', alignItems:'center', gap:12 }}>
           <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-            <div style={{ width:24, height:24, borderRadius:7, display:'flex', alignItems:'center', justifyContent:'center', fontSize:12, background:'rgba(245,158,11,0.1)', border:'1px solid rgba(245,158,11,0.2)' }}>📖</div>
+            <div style={{ width:24, height:24, borderRadius:7, display:'flex', alignItems:'center', justifyContent:'center', color:catInk('#f59e0b'), background:'rgba(245,158,11,0.1)', border:'1px solid rgba(245,158,11,0.2)' }}><BookOpen size={12} strokeWidth={2} /></div>
             <span style={{ fontSize:11, fontWeight:900, letterSpacing:'0.18em', textTransform:'uppercase', color:'var(--gl-text-faint)' }}>ICT Glossary</span>
             <span style={{ width:3, height:3, borderRadius:'50%', background:'rgba(245,158,11,0.3)', display:'inline-block' }}/>
             <span style={{ fontSize:10, fontWeight:700, color:'var(--gl-text-faint)' }}>a Chronic Trading tool</span>

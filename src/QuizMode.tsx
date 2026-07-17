@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from 'react'
-import { Zap, Check, X } from 'lucide-react'
+import { Zap, Check, X, Star } from 'lucide-react'
 import { TERMS, CATEGORY_COLORS, type Term } from './terms'
 import { DIAGRAMS } from './diagrams'
 
@@ -93,8 +93,8 @@ export function QuizMode({ onClose }: { onClose: () => void }) {
           <div style={{ display:'flex', alignItems:'center', gap:10 }}>
             <span style={{ fontSize:11, fontWeight:900, color:catInk('#34d399'), fontVariantNumeric:'tabular-nums', display:'inline-flex', alignItems:'center', gap:4 }}><Check size={12} strokeWidth={3} /> {score}</span>
             {best > 0 && <span style={{ fontSize:10, fontWeight:700, color:catInk('#f59e0b') }}>Best {best}/{ROUND_SIZE}</span>}
-            <button onClick={onClose} style={{ fontSize:12, fontWeight:700, color:'var(--gl-text-dim)', background:'var(--gl-border)', border:'1px solid var(--gl-border)', borderRadius:8, padding:'5px 12px', cursor:'pointer' }}>
-              ✕ Close
+            <button onClick={onClose} style={{ fontSize:12, fontWeight:700, color:'var(--gl-text-dim)', background:'var(--gl-border)', border:'1px solid var(--gl-border)', borderRadius:8, padding:'5px 12px', cursor:'pointer', display:'inline-flex', alignItems:'center', gap:5 }}>
+              <X size={12} strokeWidth={2.5} /> Close
             </button>
           </div>
         </div>
@@ -113,7 +113,7 @@ export function QuizMode({ onClose }: { onClose: () => void }) {
             <p style={{ fontSize:15, fontWeight:700, color:'var(--gl-text)', marginBottom:6 }}>
               {score === round.length ? '🔥 Perfect — you know your diagrams' : score >= 8 ? 'Sharp eye — nearly flawless' : score >= 5 ? 'Solid — keep drilling' : 'The diagrams will click — run it again'}
             </p>
-            {score >= best && score > 0 && <p style={{ fontSize:11, fontWeight:900, letterSpacing:'0.14em', color:catInk('#f59e0b'), textTransform:'uppercase', marginBottom:24 }}>★ New best</p>}
+            {score >= best && score > 0 && <p style={{ fontSize:11, fontWeight:900, letterSpacing:'0.14em', color:catInk('#f59e0b'), textTransform:'uppercase', marginBottom:24, display:'flex', alignItems:'center', justifyContent:'center', gap:5 }}><Star size={11} strokeWidth={2} fill="currentColor" /> New best</p>}
             <div style={{ display:'flex', gap:10, justifyContent:'center', marginTop:24 }}>
               <button onClick={restart} style={{ padding:'12px 28px', borderRadius:14, fontSize:13, fontWeight:900, background:'linear-gradient(135deg,#f59e0b,#d97706)', color:'#0a0800', border:'none', cursor:'pointer' }}>
                 ↺ Play again
