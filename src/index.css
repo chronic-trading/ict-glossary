@@ -14,7 +14,7 @@
   --gl-border-2:   #dccfb9;
   --gl-text:       #2c2720;
   --gl-text-dim:   #6d6456;
-  --gl-text-faint: #8c8069;
+  --gl-text-faint: #6f6555;   /* darkened to clear WCAG AA (4.5:1) on warm paper */
   --gl-hairline:   rgba(74, 58, 28, 0.06);
   --gl-overlay:    rgba(247, 244, 238, 0.94);
   color-scheme: light;
@@ -28,7 +28,7 @@ html[data-theme="dark"] {
   --gl-border-2:   rgba(255, 255, 255, 0.15);
   --gl-text:       #ffffff;
   --gl-text-dim:   rgba(148, 163, 184, 0.85);
-  --gl-text-faint: rgba(100, 116, 139, 0.7);
+  --gl-text-faint: #7f8da1;   /* lightened to clear WCAG AA (4.5:1) on the dark bg */
   --gl-hairline:   rgba(255, 255, 255, 0.05);
   --gl-overlay:    rgba(2, 2, 6, 0.96);
   color-scheme: dark;

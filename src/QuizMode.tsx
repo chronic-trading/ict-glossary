@@ -148,7 +148,7 @@ export function QuizMode({ onClose }: { onClose: () => void }) {
                     }}>
                     {opt.term}{opt.abbr ? ` (${opt.abbr})` : ''}
                     {isCorrect ? <Check size={12} strokeWidth={3} style={{ display:'inline', verticalAlign:'-2px', marginLeft:4 }} /> : isWrong ? <X size={12} strokeWidth={3} style={{ display:'inline', verticalAlign:'-2px', marginLeft:4 }} /> : ''}
-                    {!picked && <span style={{ display:'block', fontSize: 10, fontWeight:900, letterSpacing:'0.14em', textTransform:'uppercase', color:`${catInk(oc)}b0`, marginTop:3 }}>{opt.category}</span>}
+                    {!picked && <span style={{ display:'block', fontSize: 10, fontWeight:900, letterSpacing:'0.14em', textTransform:'uppercase', color:catInk(oc), marginTop:3 }}>{opt.category}</span>}
                   </button>
                 )
               })}

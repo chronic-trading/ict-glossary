@@ -35,7 +35,7 @@ function catInk(hex: string): string {
   if (document.documentElement.getAttribute('data-theme') !== 'light') return hex
   if (!/^#[0-9a-fA-F]{6}$/.test(hex)) return hex
   const n = parseInt(hex.slice(1), 16)
-  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255, k = 0.58
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255, k = 0.52
   const h = (v: number) => Math.round(v * k).toString(16).padStart(2, '0')
   return `#${h(r)}${h(g)}${h(b)}`
 }
@@ -118,7 +118,7 @@ function Ticker() {
     <div style={{ overflow:'hidden', width:'100%', borderTop:'1px solid rgba(245,158,11,0.1)', borderBottom:'1px solid rgba(245,158,11,0.1)', background:'rgba(245,158,11,0.03)', padding:'6px 0', maskImage:'linear-gradient(90deg,transparent,black 6%,black 94%,transparent)', WebkitMaskImage:'linear-gradient(90deg,transparent,black 6%,black 94%,transparent)' }}>
       <div style={{ display:'flex', gap:'24px', whiteSpace:'nowrap', animation:`ticker-scroll ${items.length*0.9}s linear infinite`, willChange:'transform' }}>
         {full.map((label,i) => (
-          <span key={i} style={{ fontSize:'9px', fontWeight:900, letterSpacing:'0.14em', color:catInk(['#f59e0b','#34d399','#60a5fa','#c084fc','#fb923c','#f472b6','#14b8a6'][i%7]), opacity:0.65 }}>
+          <span key={i} style={{ fontSize:'9px', fontWeight:900, letterSpacing:'0.14em', color:catInk(['#f59e0b','#34d399','#60a5fa','#c084fc','#fb923c','#f472b6','#14b8a6'][i%7]) }}>
             {label}
           </span>
         ))}
@@ -170,13 +170,13 @@ function DailyTermBanner({ onSearch }: { onSearch: (q: string) => void }) {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 12 }}>
               <span style={{ width: 5, height: 5, borderRadius: '50%', background: color, boxShadow: `0 0 6px ${color}`, display: 'inline-block' }}/>
-              <span style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.16em', color, textTransform: 'uppercase', opacity: 0.8 }}>{term.category}</span>
+              <span style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.16em', color, textTransform: 'uppercase' }}>{term.category}</span>
             </div>
             <p style={{ fontSize: 12, color: 'var(--gl-text-dim)', lineHeight: 1.7, display: '-webkit-box', WebkitLineClamp: expanded ? 'unset' : 4, WebkitBoxOrient: 'vertical', overflow: expanded ? 'visible' : 'hidden' }}>
               {term.definition}
             </p>
             {!expanded && (
-              <button onClick={() => setExpanded(true)} style={{ marginTop: 8, fontSize: 10, fontWeight: 700, color: `${color}80`, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+              <button onClick={() => setExpanded(true)} style={{ marginTop: 8, fontSize: 10, fontWeight: 700, color, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
                 Read more ↓
               </button>
             )}
@@ -299,7 +299,7 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
 
         <div style={{ display:'flex', alignItems:'center', gap:5, marginBottom:9 }}>
           <span style={{ width:5, height:5, borderRadius:'50%', background:color, boxShadow:`0 0 6px ${color}`, display:'inline-block' }}/>
-          <span style={{ fontSize:9, fontWeight:900, letterSpacing:'0.16em', color, textTransform:'uppercase', opacity:0.8 }}>{term.category}</span>
+          <span style={{ fontSize:9, fontWeight:900, letterSpacing:'0.16em', color, textTransform:'uppercase' }}>{term.category}</span>
         </div>
 
         <p style={{ fontSize:12, color:'var(--gl-text-dim)', lineHeight:1.68, display:'-webkit-box', WebkitLineClamp:expanded?'unset':3, WebkitBoxOrient:'vertical', overflow:expanded?'visible':'hidden' }}>
@@ -307,7 +307,7 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
         </p>
 
         <div style={{ display:'flex', justifyContent:'flex-end', marginTop:8 }}>
-          <span style={{ fontSize:9, fontWeight:900, letterSpacing:'0.1em', textTransform:'uppercase', color:`${color}65`, display:'flex', alignItems:'center', gap:3 }}>
+          <span style={{ fontSize:9, fontWeight:900, letterSpacing:'0.1em', textTransform:'uppercase', color, display:'flex', alignItems:'center', gap:3 }}>
             {expanded ? 'Less' : 'Details'}
             <span style={{ display:'inline-flex', transform:expanded?'rotate(180deg)':'none', transition:'transform 0.25s cubic-bezier(.34,1.56,.64,1)' }}><ChevronDown size={12} strokeWidth={2.5} /></span>
           </span>
@@ -323,13 +323,13 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
             )}
             {term.related.length > 0 && (
               <div>
-                <p style={{ fontSize: 10, fontWeight:900, letterSpacing:'0.2em', textTransform:'uppercase', color:`${color}55`, marginBottom:8 }}>Related</p>
+                <p style={{ fontSize: 10, fontWeight:900, letterSpacing:'0.2em', textTransform:'uppercase', color, marginBottom:8 }}>Related</p>
                 <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
                   {term.related.map(r => (
                     <button key={r} className="related-tag"
                       onClick={e => { e.stopPropagation(); onRelatedClick(r) }}
                       style={{ padding:'5px 11px', borderRadius:9, fontSize:11, fontWeight:700, background:`${color}10`, color, border:`1px solid ${color}28`, cursor:'pointer', display:'flex', alignItems:'center', gap:4 }}>
-                      {r} <span style={{ opacity:0.6, fontSize:9 }}>→</span>
+                      {r} <span style={{ fontSize:9 }}>→</span>
                     </button>
                   ))}
                 </div>
@@ -348,7 +348,7 @@ function CategoryCards({ onSelect, active }: { onSelect: (c: Category | null) =>
     <section style={{ padding:'0 20px 64px' }}>
       <div style={{ maxWidth:1020, margin:'0 auto' }}>
         <div style={{ textAlign:'center', marginBottom:28 }}>
-          <p style={{ fontSize:9, fontWeight:900, letterSpacing:'0.24em', textTransform:'uppercase', color:'rgba(100,116,139,0.3)', marginBottom:8 }}>Explore by Category</p>
+          <p style={{ fontSize:9, fontWeight:900, letterSpacing:'0.24em', textTransform:'uppercase', color:'var(--gl-text-faint)', marginBottom:8 }}>Explore by Category</p>
           <h2 style={{ fontSize:'clamp(22px,4vw,34px)', fontWeight:900, letterSpacing:'-1px', color:'var(--gl-text)' }}>7 Core ICT Frameworks</h2>
           <p style={{ fontSize:13, color:'var(--gl-text-faint)', marginTop:8, maxWidth:400, margin:'8px auto 0' }}>Every concept organized by its role in the ICT methodology.</p>
         </div>
@@ -369,12 +369,12 @@ function CategoryCards({ onSelect, active }: { onSelect: (c: Category | null) =>
                   <div style={{ width:36, height:36, borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', color, background:`${color}15`, border:`1px solid ${color}28`, flexShrink:0 }}><CatIcon cat={cat} size={18} /></div>
                   <div>
                     <p style={{ fontSize:13, fontWeight:900, color:'var(--gl-text)', lineHeight:1.2 }}>{cat}</p>
-                    <p style={{ fontSize:10, color, fontWeight:700, opacity:0.8 }}>{count} concepts</p>
+                    <p style={{ fontSize:10, color, fontWeight:700 }}>{count} concepts</p>
                   </div>
                 </div>
                 <div style={{ display:'flex', flexWrap:'wrap', gap:5 }}>
                   {sample.map(s => <span key={s} style={{ fontSize:9, fontWeight:900, letterSpacing:'0.1em', padding:'3px 8px', borderRadius:6, background:`${color}10`, color, border:`1px solid ${color}20` }}>{s}</span>)}
-                  <span style={{ fontSize:9, color:`${color}55`, padding:'3px 0', display:'flex', alignItems:'center' }}>+{count-3} more →</span>
+                  <span style={{ fontSize:9, color, padding:'3px 0', display:'flex', alignItems:'center' }}>+{count-3} more →</span>
                 </div>
               </button>
             )
@@ -561,14 +561,14 @@ export default function App() {
           {CATEGORIES.slice(0,4).map(cat => (
             <div key={cat} style={{ display:'flex', alignItems:'center', gap:6 }}>
               <div style={{ width:18, height:1, background:CATEGORY_COLORS[cat], opacity:0.6 }}/>
-              <span style={{ fontSize:10, fontWeight:900, letterSpacing:'0.14em', color:catInk(CATEGORY_COLORS[cat]), textTransform:'uppercase', opacity:0.65, whiteSpace:'nowrap' }}>{cat.split(' ')[0]}</span>
+              <span style={{ fontSize:10, fontWeight:900, letterSpacing:'0.14em', color:catInk(CATEGORY_COLORS[cat]), textTransform:'uppercase', whiteSpace:'nowrap' }}>{cat.split(' ')[0]}</span>
             </div>
           ))}
         </div>
         <div className="hero-side" style={{ position:'absolute', right:'2%', top:'15%', bottom:'15%', width:'130px', pointerEvents:'none', flexDirection:'column', justifyContent:'space-evenly', alignItems:'flex-end', opacity:0.55 }}>
           {CATEGORIES.slice(3).map(cat => (
             <div key={cat} style={{ display:'flex', alignItems:'center', gap:6 }}>
-              <span style={{ fontSize:10, fontWeight:900, letterSpacing:'0.14em', color:catInk(CATEGORY_COLORS[cat]), textTransform:'uppercase', opacity:0.65, whiteSpace:'nowrap' }}>{cat.split(' ')[0]}</span>
+              <span style={{ fontSize:10, fontWeight:900, letterSpacing:'0.14em', color:catInk(CATEGORY_COLORS[cat]), textTransform:'uppercase', whiteSpace:'nowrap' }}>{cat.split(' ')[0]}</span>
               <div style={{ width:18, height:1, background:CATEGORY_COLORS[cat], opacity:0.6 }}/>
             </div>
           ))}
@@ -603,7 +603,7 @@ export default function App() {
               style={{ width:'100%', padding:'15px 44px 15px 46px', borderRadius:16, fontSize:14, color:'var(--gl-text)', background:query?'var(--gl-surface)':'var(--gl-surface)', border:`1.5px solid ${query?'rgba(245,158,11,0.5)':'var(--gl-border)'}`, boxShadow:query?'0 0 0 3px rgba(245,158,11,0.08),0 8px 32px rgba(0,0,0,0.5)':'0 4px 24px rgba(0,0,0,0.35)', outline:'none', transition:'all 0.22s', boxSizing:'border-box' }}
               autoComplete="off" spellCheck={false}
             />
-            {query && <button onClick={() => setQuery('')} style={{ position:'absolute', right:14, top:'50%', transform:'translateY(-50%)', color:'rgba(148,163,184,0.5)', background:'none', border:'none', cursor:'pointer', fontSize:20, lineHeight:1 }}>×</button>}
+            {query && <button onClick={() => setQuery('')} style={{ position:'absolute', right:14, top:'50%', transform:'translateY(-50%)', color:'var(--gl-text-faint)', background:'none', border:'none', cursor:'pointer', fontSize:20, lineHeight:1 }}>×</button>}
           </div>
           <p style={{ fontSize: 10, color:'var(--gl-text-faint)', fontWeight:600, letterSpacing:'0.08em' }}>
             Press <kbd style={{ padding:'2px 6px', borderRadius:4, background:'var(--gl-border)', border:'1px solid var(--gl-border)', fontSize:9, fontFamily:'monospace' }}>/</kbd> to focus · <kbd style={{ padding:'2px 6px', borderRadius:4, background:'var(--gl-border)', border:'1px solid var(--gl-border)', fontSize:9, fontFamily:'monospace' }}>Esc</kbd> to clear
@@ -646,7 +646,7 @@ export default function App() {
                 <button key={cat} className="cat-pill" onClick={() => setActiveCategory(active?null:cat)}
                   style={{ padding:'6px 13px', borderRadius:11, fontSize:10, fontWeight:900, letterSpacing:'0.06em', cursor:'pointer', border:`1.5px solid ${active?color+'50':'var(--gl-border)'}`, background:active?`${color}17`:'var(--gl-surface-2)', color:active?color:'var(--gl-text-faint)', boxShadow:active?`0 0 18px ${color}18`:'none', transition:'all 0.18s', display:'flex', alignItems:'center', gap:5 }}>
                   <span style={{ width:5, height:5, borderRadius:'50%', background:color, opacity:active?1:0.5, display:'inline-block', boxShadow:active?`0 0 6px ${color}`:'none' }}/>
-                  {cat} <span style={{ opacity:0.55, fontSize:9 }}>{count}</span>
+                  {cat} <span style={{ color:'var(--gl-text-dim)', fontSize:9 }}>{count}</span>
                 </button>
               )
             })}
@@ -658,7 +658,7 @@ export default function App() {
       {!query && (
         <section style={{ padding:'12px 20px 6px', position:'relative', zIndex:1 }}>
           <div style={{ maxWidth:1020, margin:'0 auto', display:'flex', flexWrap:'wrap', gap:4, justifyContent:'center', alignItems:'center' }}>
-            <span style={{ fontSize:9, fontWeight:700, letterSpacing:'0.15em', color:'rgba(100,116,139,0.3)', textTransform:'uppercase', marginRight:4 }}>A–Z</span>
+            <span style={{ fontSize:9, fontWeight:700, letterSpacing:'0.15em', color:'var(--gl-text-faint)', textTransform:'uppercase', marginRight:4 }}>A–Z</span>
             {ALL_LETTERS.map(letter => {
               const has=lettersWithTerms.has(letter), active=activeLetter===letter
               return (
@@ -696,9 +696,9 @@ export default function App() {
         <div style={{ maxWidth:1020, margin:'0 auto' }}>
           {displayed.length === 0 ? (
             <div style={{ textAlign:'center', padding:'80px 0' }} className="animate-fade-up">
-              <div style={{ fontSize:44, marginBottom:16, opacity:0.5 }}>🔍</div>
-              <p style={{ fontSize:16, fontWeight:700, color:'var(--gl-text-faint)', marginBottom:6 }}>No terms match</p>
-              <p style={{ fontSize:12, color:'rgba(30,41,59,0.8)' }}>Try a different search or clear filters</p>
+              <div style={{ marginBottom:16, color:'var(--gl-text-faint)', display:'flex', justifyContent:'center' }}><Search size={40} strokeWidth={1.5} /></div>
+              <p style={{ fontSize:16, fontWeight:700, color:'var(--gl-text-dim)', marginBottom:6 }}>No terms match</p>
+              <p style={{ fontSize:12, color:'var(--gl-text-faint)' }}>Try a different search or clear filters</p>
             </div>
           ) : (
             <div className="card-grid" style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))', gap:12, alignItems:'start' }}>
@@ -722,7 +722,7 @@ export default function App() {
       {/* ══ Stats ══ */}
       <section style={{ borderTop:'1px solid var(--gl-border)', padding:'48px 20px', position:'relative', zIndex:1 }}>
         <div style={{ maxWidth:1020, margin:'0 auto' }}>
-          <p style={{ textAlign:'center', fontSize:9, fontWeight:900, letterSpacing:'0.22em', textTransform:'uppercase', color:'rgba(100,116,139,0.25)', marginBottom:20 }}>By the numbers</p>
+          <p style={{ textAlign:'center', fontSize:9, fontWeight:900, letterSpacing:'0.22em', textTransform:'uppercase', color:'var(--gl-text-faint)', marginBottom:20 }}>By the numbers</p>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))', gap:10 }}>
             {[
               { val:`${TERMS.length}`,                              label:'Terms',      color:catInk('#f59e0b'), icon:BookOpen },
@@ -750,7 +750,7 @@ export default function App() {
       {/* ══ ICT Flow strip ══ */}
       <section style={{ borderTop:'1px solid var(--gl-surface-2)', padding:'36px 20px', position:'relative', zIndex:1 }}>
         <div style={{ maxWidth:1020, margin:'0 auto' }}>
-          <p style={{ textAlign:'center', fontSize:9, fontWeight:900, letterSpacing:'0.22em', textTransform:'uppercase', color:'rgba(100,116,139,0.25)', marginBottom:14 }}>ICT Trade Execution Flow</p>
+          <p style={{ textAlign:'center', fontSize:9, fontWeight:900, letterSpacing:'0.22em', textTransform:'uppercase', color:'var(--gl-text-faint)', marginBottom:14 }}>ICT Trade Execution Flow</p>
           <div style={{ display:'flex', alignItems:'center', justifyContent:'center', flexWrap:'wrap', gap:0 }}>
             {[
               { label:'HTF Bias',c:'#f472b6' },{label:'→',c:'var(--gl-text-faint)'},
@@ -767,7 +767,7 @@ export default function App() {
               </span>
             ))}
           </div>
-          <p style={{ textAlign:'center', fontSize:11, color:'rgba(100,116,139,0.38)', marginTop:12, lineHeight:1.7 }}>
+          <p style={{ textAlign:'center', fontSize:11, color:'var(--gl-text-faint)', marginTop:12, lineHeight:1.7 }}>
             Click <kbd style={{ padding:'2px 6px', borderRadius:4, background:'var(--gl-border)', border:'1px solid var(--gl-border)', fontSize:9 }}>/</kbd> and type any step above to explore it.
           </p>
         </div>
@@ -784,10 +784,10 @@ export default function App() {
           </div>
           <div style={{ display:'flex', gap:12, flexWrap:'wrap', justifyContent:'center' }}>
             {CATEGORIES.map(cat => (
-              <span key={cat} style={{ fontSize:8, color:`${catInk(CATEGORY_COLORS[cat])}72`, fontWeight:900, letterSpacing:'0.1em', textTransform:'uppercase' }}>{cat.split(' ')[0]}</span>
+              <span key={cat} style={{ fontSize:10, color:catInk(CATEGORY_COLORS[cat]), fontWeight:900, letterSpacing:'0.1em', textTransform:'uppercase' }}>{cat.split(' ')[0]}</span>
             ))}
           </div>
-          <p style={{ fontSize:10, color:'rgba(30,41,59,0.9)' }}>Educational reference only — not financial advice.</p>
+          <p style={{ fontSize:10, color:'var(--gl-text-faint)' }}>Educational reference only — not financial advice.</p>
         </div>
       </footer>
     </div>
