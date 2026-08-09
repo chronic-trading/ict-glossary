@@ -88,11 +88,11 @@ export function QuizMode({ onClose }: { onClose: () => void }) {
         <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:16 }}>
           <div style={{ display:'flex', alignItems:'center', gap:8 }}>
             <span style={{ fontSize:11, fontWeight:900, letterSpacing:'0.2em', color:catInk('#f59e0b'), display:'inline-flex', alignItems:'center', gap:6 }}><Zap size={13} strokeWidth={2.5} /> DIAGRAM QUIZ</span>
-            {!finished && <span style={{ fontSize:10, color:'var(--gl-text-faint)', fontWeight:700 }}>{qi + 1} / {round.length}</span>}
+            {!finished && <span style={{ fontSize: 'var(--fs-tiny)', color:'var(--gl-text-faint)', fontWeight:700 }}>{qi + 1} / {round.length}</span>}
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:10 }}>
             <span style={{ fontSize:11, fontWeight:900, color:catInk('#34d399'), fontVariantNumeric:'tabular-nums', display:'inline-flex', alignItems:'center', gap:4 }}><Check size={12} strokeWidth={3} /> {score}</span>
-            {best > 0 && <span style={{ fontSize:10, fontWeight:700, color:catInk('#f59e0b') }}>Best {best}/{ROUND_SIZE}</span>}
+            {best > 0 && <span style={{ fontSize: 'var(--fs-tiny)', fontWeight:700, color:catInk('#f59e0b') }}>Best {best}/{ROUND_SIZE}</span>}
             <button onClick={onClose} style={{ fontSize:12, fontWeight:700, color:'var(--gl-text-dim)', background:'var(--gl-border)', border:'1px solid var(--gl-border)', borderRadius:8, padding:'5px 12px', cursor:'pointer', display:'inline-flex', alignItems:'center', gap:5 }}>
               <X size={12} strokeWidth={2.5} /> Close
             </button>
@@ -148,7 +148,7 @@ export function QuizMode({ onClose }: { onClose: () => void }) {
                     }}>
                     {opt.term}{opt.abbr ? ` (${opt.abbr})` : ''}
                     {isCorrect ? <Check size={12} strokeWidth={3} style={{ display:'inline', verticalAlign:'-2px', marginLeft:4 }} /> : isWrong ? <X size={12} strokeWidth={3} style={{ display:'inline', verticalAlign:'-2px', marginLeft:4 }} /> : ''}
-                    {!picked && <span style={{ display:'block', fontSize: 10, fontWeight:900, letterSpacing:'0.14em', textTransform:'uppercase', color:catInk(oc), marginTop:3 }}>{opt.category}</span>}
+                    {!picked && <span style={{ display:'block', fontSize: 'var(--fs-tiny)', fontWeight:900, letterSpacing:'0.14em', textTransform:'uppercase', color:catInk(oc), marginTop:3 }}>{opt.category}</span>}
                   </button>
                 )
               })}
@@ -157,7 +157,7 @@ export function QuizMode({ onClose }: { onClose: () => void }) {
             {picked && (
               <div style={{ marginTop:14 }}>
                 <div style={{ padding:'12px 14px', borderRadius:13, background:`${color}0a`, border:`1px solid ${color}22`, marginBottom:12 }}>
-                  <p style={{ fontSize:10, fontWeight:900, letterSpacing:'0.16em', textTransform:'uppercase', color, marginBottom:5 }}>{q.term.term}</p>
+                  <p style={{ fontSize: 'var(--fs-tiny)', fontWeight:900, letterSpacing:'0.16em', textTransform:'uppercase', color, marginBottom:5 }}>{q.term.term}</p>
                   <p style={{ fontSize: 12, color:'var(--gl-text-dim)', lineHeight:1.6 }}>{q.term.definition}</p>
                 </div>
                 <button onClick={next}

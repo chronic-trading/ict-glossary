@@ -118,7 +118,7 @@ function Ticker() {
     <div style={{ overflow:'hidden', width:'100%', borderTop:'1px solid rgba(245,158,11,0.1)', borderBottom:'1px solid rgba(245,158,11,0.1)', background:'rgba(245,158,11,0.03)', padding:'6px 0', maskImage:'linear-gradient(90deg,transparent,black 6%,black 94%,transparent)', WebkitMaskImage:'linear-gradient(90deg,transparent,black 6%,black 94%,transparent)' }}>
       <div style={{ display:'flex', gap:'24px', whiteSpace:'nowrap', animation:`ticker-scroll ${items.length*0.9}s linear infinite`, willChange:'transform' }}>
         {full.map((label,i) => (
-          <span key={i} style={{ fontSize:'9px', fontWeight:900, letterSpacing:'0.14em', color:catInk(['#f59e0b','#34d399','#60a5fa','#c084fc','#fb923c','#f472b6','#14b8a6'][i%7]) }}>
+          <span key={i} style={{ fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.14em', color:catInk(['#f59e0b','#34d399','#60a5fa','#c084fc','#fb923c','#f472b6','#14b8a6'][i%7]) }}>
             {label}
           </span>
         ))}
@@ -144,16 +144,16 @@ function DailyTermBanner({ onSearch }: { onSearch: (q: string) => void }) {
       }}>
         <div style={{ padding: '16px 20px 0', display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.22em', textTransform: 'uppercase', padding: '3px 10px', borderRadius: 7, background: `${color}18`, color, border: `1px solid ${color}28`, display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+            <span style={{ fontSize: 'var(--fs-micro)', fontWeight: 900, letterSpacing: '0.22em', textTransform: 'uppercase', padding: '3px 10px', borderRadius: 7, background: `${color}18`, color, border: `1px solid ${color}28`, display: 'inline-flex', alignItems: 'center', gap: 5 }}>
               <Sparkles size={10} strokeWidth={2.5} /> Term of the Day
             </span>
-            <span style={{ fontSize: 10, color: 'var(--gl-text-faint)', fontWeight: 600 }}>
+            <span style={{ fontSize: 'var(--fs-tiny)', color: 'var(--gl-text-faint)', fontWeight: 600 }}>
               {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
             </span>
           </div>
           <button
             onClick={() => onSearch(term.term)}
-            style={{ fontSize: 10, fontWeight: 700, color, background: 'none', border: `1px solid ${color}28`, borderRadius: 8, padding: '4px 12px', cursor: 'pointer', transition: 'all 0.15s' }}
+            style={{ fontSize: 'var(--fs-tiny)', fontWeight: 700, color, background: 'none', border: `1px solid ${color}28`, borderRadius: 8, padding: '4px 12px', cursor: 'pointer', transition: 'all 0.15s' }}
             onMouseEnter={e => (e.currentTarget.style.background = `${color}14`)}
             onMouseLeave={e => (e.currentTarget.style.background = 'none')}
           >
@@ -166,23 +166,23 @@ function DailyTermBanner({ onSearch }: { onSearch: (q: string) => void }) {
           <div style={{ padding: '16px 20px 20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
               <h3 style={{ fontSize: 20, fontWeight: 900, color: 'var(--gl-text)', letterSpacing: '-0.5px' }}>{term.term}</h3>
-              {term.abbr && <span style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.14em', padding: '3px 8px', borderRadius: 7, background: `${color}16`, color, border: `1px solid ${color}30` }}>{term.abbr}</span>}
+              {term.abbr && <span style={{ fontSize: 'var(--fs-micro)', fontWeight: 900, letterSpacing: '0.14em', padding: '3px 8px', borderRadius: 7, background: `${color}16`, color, border: `1px solid ${color}30` }}>{term.abbr}</span>}
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 12 }}>
               <span style={{ width: 5, height: 5, borderRadius: '50%', background: color, boxShadow: `0 0 6px ${color}`, display: 'inline-block' }}/>
-              <span style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.16em', color, textTransform: 'uppercase' }}>{term.category}</span>
+              <span style={{ fontSize: 'var(--fs-micro)', fontWeight: 900, letterSpacing: '0.16em', color, textTransform: 'uppercase' }}>{term.category}</span>
             </div>
             <p style={{ fontSize: 12, color: 'var(--gl-text-dim)', lineHeight: 1.7, display: '-webkit-box', WebkitLineClamp: expanded ? 'unset' : 4, WebkitBoxOrient: 'vertical', overflow: expanded ? 'visible' : 'hidden' }}>
               {term.definition}
             </p>
             {!expanded && (
-              <button onClick={() => setExpanded(true)} style={{ marginTop: 8, fontSize: 10, fontWeight: 700, color, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+              <button onClick={() => setExpanded(true)} style={{ marginTop: 8, fontSize: 'var(--fs-tiny)', fontWeight: 700, color, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
                 Read more ↓
               </button>
             )}
             {expanded && term.example && (
               <div style={{ marginTop: 12, padding: '10px 12px', borderRadius: 12, background: `${color}08`, border: `1px solid ${color}18`, fontSize: 12, color: 'var(--gl-text-dim)', lineHeight: 1.65 }}>
-                <span style={{ display: 'block', fontSize: 10, fontWeight: 900, letterSpacing: '0.18em', textTransform: 'uppercase', color, marginBottom: 6 }}>Example</span>
+                <span style={{ display: 'block', fontSize: 'var(--fs-tiny)', fontWeight: 900, letterSpacing: '0.18em', textTransform: 'uppercase', color, marginBottom: 6 }}>Example</span>
                 {term.example}
               </div>
             )}
@@ -257,8 +257,8 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
       {/* Diagram */}
       <div className="diagram-frame" style={{ background:`linear-gradient(160deg,${color}0e 0%,${color}03 50%,rgba(4,4,8,1) 80%)`, borderBottom:`1px solid ${color}14`, position:'relative' }}>
         <div style={{ position:'absolute', top:8, right:8, zIndex:3, display:'flex', gap:5, alignItems:'center' }}>
-          {learned && <span style={{ fontSize:10, background:'rgba(52,211,153,0.15)', color:catInk('#34d399'), border:'1px solid rgba(52,211,153,0.3)', borderRadius:5, padding:'2px 6px', fontWeight:900, letterSpacing:'0.1em', display:'inline-flex', alignItems:'center', gap:4 }}><Check size={11} strokeWidth={3} /> LEARNED</span>}
-          <span style={{ fontSize:7, fontWeight:900, letterSpacing:'0.14em', padding:'3px 7px', borderRadius:6, background:`${color}14`, color, border:`1px solid ${color}28`, textTransform:'uppercase' }}>
+          {learned && <span style={{ fontSize: 'var(--fs-tiny)', background:'rgba(52,211,153,0.15)', color:catInk('#34d399'), border:'1px solid rgba(52,211,153,0.3)', borderRadius:5, padding:'2px 6px', fontWeight:900, letterSpacing:'0.1em', display:'inline-flex', alignItems:'center', gap:4 }}><Check size={11} strokeWidth={3} /> LEARNED</span>}
+          <span style={{ fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.14em', padding:'3px 7px', borderRadius:6, background:`${color}14`, color, border:`1px solid ${color}28`, textTransform:'uppercase' }}>
             {CAT_SHORT[term.category]}
           </span>
         </div>
@@ -273,7 +273,7 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
         <div style={{ display:'flex', alignItems:'flex-start', gap:8, marginBottom:6 }}>
           <h3 style={{ fontSize:14, fontWeight:900, color:'var(--gl-text)', lineHeight:1.2, flex:1, letterSpacing:'-0.2px' }}>{term.term}</h3>
           <div style={{ display:'flex', alignItems:'center', gap:5, flexShrink:0 }}>
-            {term.abbr && <span style={{ fontSize:9, fontWeight:900, letterSpacing:'0.14em', padding:'3px 8px', borderRadius:7, background:`${color}16`, color, border:`1px solid ${color}30` }}>{term.abbr}</span>}
+            {term.abbr && <span style={{ fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.14em', padding:'3px 8px', borderRadius:7, background:`${color}16`, color, border:`1px solid ${color}30` }}>{term.abbr}</span>}
             {/* Copy shareable link */}
             <button
               onClick={copyLink}
@@ -299,7 +299,7 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
 
         <div style={{ display:'flex', alignItems:'center', gap:5, marginBottom:9 }}>
           <span style={{ width:5, height:5, borderRadius:'50%', background:color, boxShadow:`0 0 6px ${color}`, display:'inline-block' }}/>
-          <span style={{ fontSize:9, fontWeight:900, letterSpacing:'0.16em', color, textTransform:'uppercase' }}>{term.category}</span>
+          <span style={{ fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.16em', color, textTransform:'uppercase' }}>{term.category}</span>
         </div>
 
         <p style={{ fontSize:12, color:'var(--gl-text-dim)', lineHeight:1.68, display:'-webkit-box', WebkitLineClamp:expanded?'unset':3, WebkitBoxOrient:'vertical', overflow:expanded?'visible':'hidden' }}>
@@ -307,7 +307,7 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
         </p>
 
         <div style={{ display:'flex', justifyContent:'flex-end', marginTop:8 }}>
-          <span style={{ fontSize:9, fontWeight:900, letterSpacing:'0.1em', textTransform:'uppercase', color, display:'flex', alignItems:'center', gap:3 }}>
+          <span style={{ fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.1em', textTransform:'uppercase', color, display:'flex', alignItems:'center', gap:3 }}>
             {expanded ? 'Less' : 'Details'}
             <span style={{ display:'inline-flex', transform:expanded?'rotate(180deg)':'none', transition:'transform 0.25s cubic-bezier(.34,1.56,.64,1)' }}><ChevronDown size={12} strokeWidth={2.5} /></span>
           </span>
@@ -317,19 +317,19 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
           <div className="expand-content" style={{ marginTop:12, borderTop:`1px solid ${color}14`, paddingTop:12 }}>
             {term.example && (
               <div style={{ padding:'10px 12px', borderRadius:12, marginBottom:10, background:`${color}08`, border:`1px solid ${color}18`, fontSize: 12, color:'var(--gl-text-dim)', lineHeight:1.65 }}>
-                <span style={{ display:'block', fontSize: 10, fontWeight:900, letterSpacing:'0.18em', textTransform:'uppercase', color, marginBottom:6 }}>Example</span>
+                <span style={{ display:'block', fontSize: 'var(--fs-tiny)', fontWeight:900, letterSpacing:'0.18em', textTransform:'uppercase', color, marginBottom:6 }}>Example</span>
                 {term.example}
               </div>
             )}
             {term.related.length > 0 && (
               <div>
-                <p style={{ fontSize: 10, fontWeight:900, letterSpacing:'0.2em', textTransform:'uppercase', color, marginBottom:8 }}>Related</p>
+                <p style={{ fontSize: 'var(--fs-tiny)', fontWeight:900, letterSpacing:'0.2em', textTransform:'uppercase', color, marginBottom:8 }}>Related</p>
                 <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
                   {term.related.map(r => (
                     <button key={r} className="related-tag"
                       onClick={e => { e.stopPropagation(); onRelatedClick(r) }}
                       style={{ padding:'5px 11px', borderRadius:9, fontSize:11, fontWeight:700, background:`${color}10`, color, border:`1px solid ${color}28`, cursor:'pointer', display:'flex', alignItems:'center', gap:4 }}>
-                      {r} <span style={{ fontSize:9 }}>→</span>
+                      {r} <span style={{ fontSize: 'var(--fs-micro)' }}>→</span>
                     </button>
                   ))}
                 </div>
@@ -348,7 +348,7 @@ function CategoryCards({ onSelect, active }: { onSelect: (c: Category | null) =>
     <section style={{ padding:'0 20px 64px' }}>
       <div style={{ maxWidth:1020, margin:'0 auto' }}>
         <div style={{ textAlign:'center', marginBottom:28 }}>
-          <p style={{ fontSize:9, fontWeight:900, letterSpacing:'0.24em', textTransform:'uppercase', color:'var(--gl-text-faint)', marginBottom:8 }}>Explore by Category</p>
+          <p style={{ fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.24em', textTransform:'uppercase', color:'var(--gl-text-faint)', marginBottom:8 }}>Explore by Category</p>
           <h2 style={{ fontSize:'clamp(22px,4vw,34px)', fontWeight:900, letterSpacing:'-1px', color:'var(--gl-text)' }}>7 Core ICT Frameworks</h2>
           <p style={{ fontSize:13, color:'var(--gl-text-faint)', marginTop:8, maxWidth:400, margin:'8px auto 0' }}>Every concept organized by its role in the ICT methodology.</p>
         </div>
@@ -369,12 +369,12 @@ function CategoryCards({ onSelect, active }: { onSelect: (c: Category | null) =>
                   <div style={{ width:36, height:36, borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', color, background:`${color}15`, border:`1px solid ${color}28`, flexShrink:0 }}><CatIcon cat={cat} size={18} /></div>
                   <div>
                     <p style={{ fontSize:13, fontWeight:900, color:'var(--gl-text)', lineHeight:1.2 }}>{cat}</p>
-                    <p style={{ fontSize:10, color, fontWeight:700 }}>{count} concepts</p>
+                    <p style={{ fontSize: 'var(--fs-tiny)', color, fontWeight:700 }}>{count} concepts</p>
                   </div>
                 </div>
                 <div style={{ display:'flex', flexWrap:'wrap', gap:5 }}>
-                  {sample.map(s => <span key={s} style={{ fontSize:9, fontWeight:900, letterSpacing:'0.1em', padding:'3px 8px', borderRadius:6, background:`${color}10`, color, border:`1px solid ${color}20` }}>{s}</span>)}
-                  <span style={{ fontSize:9, color, padding:'3px 0', display:'flex', alignItems:'center' }}>+{count-3} more →</span>
+                  {sample.map(s => <span key={s} style={{ fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.1em', padding:'3px 8px', borderRadius:6, background:`${color}10`, color, border:`1px solid ${color}20` }}>{s}</span>)}
+                  <span style={{ fontSize: 'var(--fs-micro)', color, padding:'3px 0', display:'flex', alignItems:'center' }}>+{count-3} more →</span>
                 </div>
               </button>
             )
@@ -517,7 +517,7 @@ export default function App() {
             <div style={{ width:30, height:30, borderRadius:9, display:'flex', alignItems:'center', justifyContent:'center', color:catInk('#f59e0b'), background:'rgba(245,158,11,0.12)', border:'1px solid rgba(245,158,11,0.28)', boxShadow:'0 0 12px rgba(245,158,11,0.12)' }}><BookOpen size={15} strokeWidth={2} /></div>
             <div style={{ display:'flex', alignItems:'baseline', gap:7 }}>
               <span style={{ fontSize:12, fontWeight:900, letterSpacing:'0.2em', color:'var(--gl-text)' }}>ICT GLOSSARY</span>
-              <span style={{ fontSize:9, fontWeight:700, letterSpacing:'0.12em', textTransform:'uppercase', color:'var(--gl-text-faint)' }}>by Chronic Trading</span>
+              <span style={{ fontSize: 'var(--fs-micro)', fontWeight:700, letterSpacing:'0.12em', textTransform:'uppercase', color:'var(--gl-text-faint)' }}>by Chronic Trading</span>
             </div>
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:8 }}>
@@ -526,23 +526,23 @@ export default function App() {
                 <div style={{ width:60, height:4, borderRadius:2, background:'var(--gl-border)', overflow:'hidden' }}>
                   <div style={{ width:`${learnedPct}%`, height:'100%', background:'linear-gradient(90deg,#34d399,#059669)', borderRadius:2, transition:'width 0.4s ease' }}/>
                 </div>
-                <span style={{ fontSize:9, fontWeight:700, color:'rgba(52,211,153,0.7)' }}>{learnedCount}/{TERMS.length}</span>
+                <span style={{ fontSize: 'var(--fs-micro)', fontWeight:700, color:'rgba(52,211,153,0.7)' }}>{learnedCount}/{TERMS.length}</span>
               </div>
             )}
             <div style={{ width:1, height:14, background:'var(--gl-border)' }}/>
             <button onClick={() => setQuizOpen(true)}
-              style={{ fontSize:9, fontWeight:900, letterSpacing:'0.1em', padding:'4px 10px', borderRadius:7, background:'rgba(245,158,11,0.1)', color:catInk('#f59e0b'), border:'1px solid rgba(245,158,11,0.25)', cursor:'pointer', transition:'all 0.15s', display:'inline-flex', alignItems:'center', gap:5 }}
+              style={{ fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.1em', padding:'4px 10px', borderRadius:7, background:'rgba(245,158,11,0.1)', color:catInk('#f59e0b'), border:'1px solid rgba(245,158,11,0.25)', cursor:'pointer', transition:'all 0.15s', display:'inline-flex', alignItems:'center', gap:5 }}
               onMouseEnter={e => (e.currentTarget.style.background='rgba(245,158,11,0.18)')}
               onMouseLeave={e => (e.currentTarget.style.background='rgba(245,158,11,0.1)')}>
               <Zap size={11} strokeWidth={2.5} /> QUIZ
             </button>
             {signedIn && (
-              <div title="Signed in — your learned terms sync across your Chronic Trading account" style={{ display:'flex', alignItems:'center', gap:4, fontSize:9, fontWeight:800, letterSpacing:'0.06em', padding:'4px 8px', borderRadius:7, background:'rgba(52,211,153,0.08)', color:catInk('#34d399'), border:'1px solid rgba(52,211,153,0.22)' }}>
+              <div title="Signed in — your learned terms sync across your Chronic Trading account" style={{ display:'flex', alignItems:'center', gap:4, fontSize: 'var(--fs-micro)', fontWeight:800, letterSpacing:'0.06em', padding:'4px 8px', borderRadius:7, background:'rgba(52,211,153,0.08)', color:catInk('#34d399'), border:'1px solid rgba(52,211,153,0.22)' }}>
                 <span style={{ width:5, height:5, borderRadius:'50%', background:'#34d399', boxShadow:'0 0 6px #34d399' }}/>
                 Synced
               </div>
             )}
-            <div style={{ fontSize:9, fontWeight:900, letterSpacing:'0.1em', padding:'4px 9px', borderRadius:7, background:'rgba(52,211,153,0.1)', color:catInk('#34d399'), border:'1px solid rgba(52,211,153,0.22)' }}>
+            <div style={{ fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.1em', padding:'4px 9px', borderRadius:7, background:'rgba(52,211,153,0.1)', color:catInk('#34d399'), border:'1px solid rgba(52,211,153,0.22)' }}>
               {TERMS.length} terms
             </div>
             <ThemeToggle />
@@ -561,14 +561,14 @@ export default function App() {
           {CATEGORIES.slice(0,4).map(cat => (
             <div key={cat} style={{ display:'flex', alignItems:'center', gap:6 }}>
               <div style={{ width:18, height:1, background:CATEGORY_COLORS[cat], opacity:0.6 }}/>
-              <span style={{ fontSize:10, fontWeight:900, letterSpacing:'0.14em', color:catInk(CATEGORY_COLORS[cat]), textTransform:'uppercase', whiteSpace:'nowrap' }}>{cat.split(' ')[0]}</span>
+              <span style={{ fontSize: 'var(--fs-tiny)', fontWeight:900, letterSpacing:'0.14em', color:catInk(CATEGORY_COLORS[cat]), textTransform:'uppercase', whiteSpace:'nowrap' }}>{cat.split(' ')[0]}</span>
             </div>
           ))}
         </div>
         <div className="hero-side" style={{ position:'absolute', right:'2%', top:'15%', bottom:'15%', width:'130px', pointerEvents:'none', flexDirection:'column', justifyContent:'space-evenly', alignItems:'flex-end', opacity:0.55 }}>
           {CATEGORIES.slice(3).map(cat => (
             <div key={cat} style={{ display:'flex', alignItems:'center', gap:6 }}>
-              <span style={{ fontSize:10, fontWeight:900, letterSpacing:'0.14em', color:catInk(CATEGORY_COLORS[cat]), textTransform:'uppercase', whiteSpace:'nowrap' }}>{cat.split(' ')[0]}</span>
+              <span style={{ fontSize: 'var(--fs-tiny)', fontWeight:900, letterSpacing:'0.14em', color:catInk(CATEGORY_COLORS[cat]), textTransform:'uppercase', whiteSpace:'nowrap' }}>{cat.split(' ')[0]}</span>
               <div style={{ width:18, height:1, background:CATEGORY_COLORS[cat], opacity:0.6 }}/>
             </div>
           ))}
@@ -577,7 +577,7 @@ export default function App() {
         <div style={{ position:'relative', zIndex:2, maxWidth:740, margin:'0 auto' }}>
           <div className="animate-glow" style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'6px 16px', borderRadius:999, border:'1px solid rgba(245,158,11,0.28)', background:'rgba(245,158,11,0.07)', marginBottom:22 }}>
             <span style={{ width:6, height:6, borderRadius:'50%', background:'#f59e0b', boxShadow:'0 0 8px #f59e0b,0 0 16px #f59e0b60', display:'inline-block' }}/>
-            <span style={{ fontSize:10, fontWeight:900, letterSpacing:'0.22em', textTransform:'uppercase', color:catInk('#f59e0b') }}>
+            <span style={{ fontSize: 'var(--fs-tiny)', fontWeight:900, letterSpacing:'0.22em', textTransform:'uppercase', color:catInk('#f59e0b') }}>
               {TERMS.length} Concepts · Every one visualised
             </span>
           </div>
@@ -605,8 +605,8 @@ export default function App() {
             />
             {query && <button onClick={() => setQuery('')} style={{ position:'absolute', right:14, top:'50%', transform:'translateY(-50%)', color:'var(--gl-text-faint)', background:'none', border:'none', cursor:'pointer', fontSize:20, lineHeight:1 }}>×</button>}
           </div>
-          <p style={{ fontSize: 10, color:'var(--gl-text-faint)', fontWeight:600, letterSpacing:'0.08em' }}>
-            Press <kbd style={{ padding:'2px 6px', borderRadius:4, background:'var(--gl-border)', border:'1px solid var(--gl-border)', fontSize:9, fontFamily:'monospace' }}>/</kbd> to focus · <kbd style={{ padding:'2px 6px', borderRadius:4, background:'var(--gl-border)', border:'1px solid var(--gl-border)', fontSize:9, fontFamily:'monospace' }}>Esc</kbd> to clear
+          <p style={{ fontSize: 'var(--fs-tiny)', color:'var(--gl-text-faint)', fontWeight:600, letterSpacing:'0.08em' }}>
+            Press <kbd style={{ padding:'2px 6px', borderRadius:4, background:'var(--gl-border)', border:'1px solid var(--gl-border)', fontSize: 'var(--fs-micro)', fontFamily:'monospace' }}>/</kbd> to focus · <kbd style={{ padding:'2px 6px', borderRadius:4, background:'var(--gl-border)', border:'1px solid var(--gl-border)', fontSize: 'var(--fs-micro)', fontFamily:'monospace' }}>Esc</kbd> to clear
           </p>
 
           {/* Quick stats */}
@@ -620,7 +620,7 @@ export default function App() {
             ].map(s => (
               <div key={s.label} style={{ display:'flex', alignItems:'baseline', gap:4 }}>
                 <span style={{ fontSize:20, fontWeight:900, color:catInk(s.c), textShadow:`0 0 18px ${s.c}60`, fontVariantNumeric:'tabular-nums' }}>{s.n}</span>
-                <span style={{ fontSize: 10, color:'var(--gl-text-faint)', fontWeight:600, letterSpacing:'0.07em' }}>{s.label}</span>
+                <span style={{ fontSize: 'var(--fs-tiny)', color:'var(--gl-text-faint)', fontWeight:600, letterSpacing:'0.07em' }}>{s.label}</span>
               </div>
             ))}
           </div>
@@ -637,16 +637,16 @@ export default function App() {
         <div style={{ maxWidth:1020, margin:'0 auto' }}>
           <div style={{ display:'flex', flexWrap:'wrap', gap:6, justifyContent:'center' }}>
             <button className="cat-pill" onClick={() => setActiveCategory(null)}
-              style={{ padding:'6px 14px', borderRadius:11, fontSize:10, fontWeight:900, letterSpacing:'0.06em', cursor:'pointer', border:`1.5px solid ${!activeCategory?'rgba(245,158,11,0.5)':'var(--gl-border)'}`, background:!activeCategory?'rgba(245,158,11,0.13)':'var(--gl-surface-2)', color:!activeCategory?catInk('#f59e0b'):'var(--gl-text-faint)', boxShadow:!activeCategory?'0 0 16px rgba(245,158,11,0.14)':'none', transition:'all 0.18s' }}>
+              style={{ padding:'6px 14px', borderRadius:11, fontSize: 'var(--fs-tiny)', fontWeight:900, letterSpacing:'0.06em', cursor:'pointer', border:`1.5px solid ${!activeCategory?'rgba(245,158,11,0.5)':'var(--gl-border)'}`, background:!activeCategory?'rgba(245,158,11,0.13)':'var(--gl-surface-2)', color:!activeCategory?catInk('#f59e0b'):'var(--gl-text-faint)', boxShadow:!activeCategory?'0 0 16px rgba(245,158,11,0.14)':'none', transition:'all 0.18s' }}>
               All {TERMS.length}
             </button>
             {CATEGORIES.map(cat => {
               const color=catInk(CATEGORY_COLORS[cat]), count=TERMS.filter(t=>t.category===cat).length, active=activeCategory===cat
               return (
                 <button key={cat} className="cat-pill" onClick={() => setActiveCategory(active?null:cat)}
-                  style={{ padding:'6px 13px', borderRadius:11, fontSize:10, fontWeight:900, letterSpacing:'0.06em', cursor:'pointer', border:`1.5px solid ${active?color+'50':'var(--gl-border)'}`, background:active?`${color}17`:'var(--gl-surface-2)', color:active?color:'var(--gl-text-faint)', boxShadow:active?`0 0 18px ${color}18`:'none', transition:'all 0.18s', display:'flex', alignItems:'center', gap:5 }}>
+                  style={{ padding:'6px 13px', borderRadius:11, fontSize: 'var(--fs-tiny)', fontWeight:900, letterSpacing:'0.06em', cursor:'pointer', border:`1.5px solid ${active?color+'50':'var(--gl-border)'}`, background:active?`${color}17`:'var(--gl-surface-2)', color:active?color:'var(--gl-text-faint)', boxShadow:active?`0 0 18px ${color}18`:'none', transition:'all 0.18s', display:'flex', alignItems:'center', gap:5 }}>
                   <span style={{ width:5, height:5, borderRadius:'50%', background:color, opacity:active?1:0.5, display:'inline-block', boxShadow:active?`0 0 6px ${color}`:'none' }}/>
-                  {cat} <span style={{ color:'var(--gl-text-dim)', fontSize:9 }}>{count}</span>
+                  {cat} <span style={{ color:'var(--gl-text-dim)', fontSize: 'var(--fs-micro)' }}>{count}</span>
                 </button>
               )
             })}
@@ -658,13 +658,13 @@ export default function App() {
       {!query && (
         <section style={{ padding:'12px 20px 6px', position:'relative', zIndex:1 }}>
           <div style={{ maxWidth:1020, margin:'0 auto', display:'flex', flexWrap:'wrap', gap:4, justifyContent:'center', alignItems:'center' }}>
-            <span style={{ fontSize:9, fontWeight:700, letterSpacing:'0.15em', color:'var(--gl-text-faint)', textTransform:'uppercase', marginRight:4 }}>A–Z</span>
+            <span style={{ fontSize: 'var(--fs-micro)', fontWeight:700, letterSpacing:'0.15em', color:'var(--gl-text-faint)', textTransform:'uppercase', marginRight:4 }}>A–Z</span>
             {ALL_LETTERS.map(letter => {
               const has=lettersWithTerms.has(letter), active=activeLetter===letter
               return (
                 <button key={letter} disabled={!has} className={has?'letter-btn':''}
                   onClick={() => setActiveLetter(active?null:letter)}
-                  style={{ width:28, height:28, borderRadius:8, fontSize:10, fontWeight:900, cursor:has?'pointer':'default', border:active?'1.5px solid rgba(245,158,11,0.5)':has?'1px solid var(--gl-border)':'1px solid transparent', background:active?'rgba(245,158,11,0.14)':has?'var(--gl-surface-2)':'transparent', color:active?catInk('#f59e0b'):has?'var(--gl-text-dim)':'var(--gl-text-faint)', boxShadow:active?'0 0 12px rgba(245,158,11,0.18)':'none', transition:'all 0.14s' }}>
+                  style={{ width:28, height:28, borderRadius:8, fontSize: 'var(--fs-tiny)', fontWeight:900, cursor:has?'pointer':'default', border:active?'1.5px solid rgba(245,158,11,0.5)':has?'1px solid var(--gl-border)':'1px solid transparent', background:active?'rgba(245,158,11,0.14)':has?'var(--gl-surface-2)':'transparent', color:active?catInk('#f59e0b'):has?'var(--gl-text-dim)':'var(--gl-text-faint)', boxShadow:active?'0 0 12px rgba(245,158,11,0.18)':'none', transition:'all 0.14s' }}>
                   {letter}
                 </button>
               )
@@ -683,7 +683,7 @@ export default function App() {
             {activeCategory && <><span style={{ opacity:0.4 }}> · </span><span style={{ color:CATEGORY_COLORS[activeCategory] }}>{activeCategory}</span></>}
           </p>
           {hasFilter && (
-            <button onClick={clearFilters} style={{ fontSize:10, fontWeight:700, color:'var(--gl-text-faint)', background:'none', border:'1px solid var(--gl-border)', cursor:'pointer', padding:'4px 10px', borderRadius:8, transition:'all 0.15s' }}
+            <button onClick={clearFilters} style={{ fontSize: 'var(--fs-tiny)', fontWeight:700, color:'var(--gl-text-faint)', background:'none', border:'1px solid var(--gl-border)', cursor:'pointer', padding:'4px 10px', borderRadius:8, transition:'all 0.15s' }}
               onMouseEnter={e => (e.currentTarget.style.color='var(--gl-text-dim)')}
               onMouseLeave={e => (e.currentTarget.style.color='var(--gl-text-faint)')}
             >Clear ×</button>
@@ -722,7 +722,7 @@ export default function App() {
       {/* ══ Stats ══ */}
       <section style={{ borderTop:'1px solid var(--gl-border)', padding:'48px 20px', position:'relative', zIndex:1 }}>
         <div style={{ maxWidth:1020, margin:'0 auto' }}>
-          <p style={{ textAlign:'center', fontSize:9, fontWeight:900, letterSpacing:'0.22em', textTransform:'uppercase', color:'var(--gl-text-faint)', marginBottom:20 }}>By the numbers</p>
+          <p style={{ textAlign:'center', fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.22em', textTransform:'uppercase', color:'var(--gl-text-faint)', marginBottom:20 }}>By the numbers</p>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))', gap:10 }}>
             {[
               { val:`${TERMS.length}`,                              label:'Terms',      color:catInk('#f59e0b'), icon:BookOpen },
@@ -739,7 +739,7 @@ export default function App() {
                 <div style={{ position:'relative', zIndex:1 }}>
                   <div style={{ marginBottom:6, color:s.color, display:'flex', justifyContent:'center' }}><Ic size={18} strokeWidth={1.75} /></div>
                   <p style={{ fontWeight:900, fontSize:28, lineHeight:1, marginBottom:5, color:catInk(s.color), textShadow:`0 0 24px ${s.color}55` }}>{s.val}</p>
-                  <p style={{ fontSize:9, color:'var(--gl-text-faint)', textTransform:'uppercase', letterSpacing:'0.15em', fontWeight:700 }}>{s.label}</p>
+                  <p style={{ fontSize: 'var(--fs-micro)', color:'var(--gl-text-faint)', textTransform:'uppercase', letterSpacing:'0.15em', fontWeight:700 }}>{s.label}</p>
                 </div>
               </div>
             )})}
@@ -750,7 +750,7 @@ export default function App() {
       {/* ══ ICT Flow strip ══ */}
       <section style={{ borderTop:'1px solid var(--gl-surface-2)', padding:'36px 20px', position:'relative', zIndex:1 }}>
         <div style={{ maxWidth:1020, margin:'0 auto' }}>
-          <p style={{ textAlign:'center', fontSize:9, fontWeight:900, letterSpacing:'0.22em', textTransform:'uppercase', color:'var(--gl-text-faint)', marginBottom:14 }}>ICT Trade Execution Flow</p>
+          <p style={{ textAlign:'center', fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.22em', textTransform:'uppercase', color:'var(--gl-text-faint)', marginBottom:14 }}>ICT Trade Execution Flow</p>
           <div style={{ display:'flex', alignItems:'center', justifyContent:'center', flexWrap:'wrap', gap:0 }}>
             {[
               { label:'HTF Bias',c:'#f472b6' },{label:'→',c:'var(--gl-text-faint)'},
@@ -768,7 +768,7 @@ export default function App() {
             ))}
           </div>
           <p style={{ textAlign:'center', fontSize:11, color:'var(--gl-text-faint)', marginTop:12, lineHeight:1.7 }}>
-            Click <kbd style={{ padding:'2px 6px', borderRadius:4, background:'var(--gl-border)', border:'1px solid var(--gl-border)', fontSize:9 }}>/</kbd> and type any step above to explore it.
+            Click <kbd style={{ padding:'2px 6px', borderRadius:4, background:'var(--gl-border)', border:'1px solid var(--gl-border)', fontSize: 'var(--fs-micro)' }}>/</kbd> and type any step above to explore it.
           </p>
         </div>
       </section>
@@ -780,14 +780,14 @@ export default function App() {
             <div style={{ width:24, height:24, borderRadius:7, display:'flex', alignItems:'center', justifyContent:'center', color:catInk('#f59e0b'), background:'rgba(245,158,11,0.1)', border:'1px solid rgba(245,158,11,0.2)' }}><BookOpen size={12} strokeWidth={2} /></div>
             <span style={{ fontSize:11, fontWeight:900, letterSpacing:'0.18em', textTransform:'uppercase', color:'var(--gl-text-faint)' }}>ICT Glossary</span>
             <span style={{ width:3, height:3, borderRadius:'50%', background:'rgba(245,158,11,0.3)', display:'inline-block' }}/>
-            <span style={{ fontSize:10, fontWeight:700, color:'var(--gl-text-faint)' }}>a Chronic Trading tool</span>
+            <span style={{ fontSize: 'var(--fs-tiny)', fontWeight:700, color:'var(--gl-text-faint)' }}>a Chronic Trading tool</span>
           </div>
           <div style={{ display:'flex', gap:12, flexWrap:'wrap', justifyContent:'center' }}>
             {CATEGORIES.map(cat => (
-              <span key={cat} style={{ fontSize:10, color:catInk(CATEGORY_COLORS[cat]), fontWeight:900, letterSpacing:'0.1em', textTransform:'uppercase' }}>{cat.split(' ')[0]}</span>
+              <span key={cat} style={{ fontSize: 'var(--fs-tiny)', color:catInk(CATEGORY_COLORS[cat]), fontWeight:900, letterSpacing:'0.1em', textTransform:'uppercase' }}>{cat.split(' ')[0]}</span>
             ))}
           </div>
-          <p style={{ fontSize:10, color:'var(--gl-text-faint)' }}>Educational reference only — not financial advice.</p>
+          <p style={{ fontSize: 'var(--fs-tiny)', color:'var(--gl-text-faint)' }}>Educational reference only — not financial advice.</p>
         </div>
       </footer>
     </div>

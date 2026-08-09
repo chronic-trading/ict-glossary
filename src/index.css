@@ -324,3 +324,64 @@ body {
 @media (max-width: 700px) {
   .daily-grid { grid-template-columns: 1fr; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Mobile pass — ported from trading-lab, where the same problems were measured
+   and fixed. Nothing here changes desktop.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Micro type. This app sets sizes inline (style={{ fontSize: 9 }}), which no
+   media query can override — so the inline values point at these variables
+   instead and the variables are what changes. 9-10px is fine at desktop
+   viewing distance and unreadable at arm's length on a handset. */
+:root { --fs-micro: 9px;    --fs-tiny: 10px; }
+@media (max-width: 767px) {
+  :root { --fs-micro: 11px; --fs-tiny: 11.5px; }
+}
+
+/* Touch targets. 282 controls measured under 44px here, the smallest at 14px.
+   Buttons only — anchors are frequently inline links inside prose, where a 44px
+   box would be wrong. */
+@media (max-width: 767px) {
+  button:not(.gl-inline) { min-height: 44px; min-width: 44px; }
+  input:not([type="checkbox"]):not([type="radio"]), select, textarea { min-height: 44px; }
+  /* iOS Safari and WKWebView auto-zoom the page whenever a focused field is
+     under 16px. The search box here was 14px, so tapping it zoomed the page. */
+  input, textarea, select { font-size: 16px; }
+}
+
+/* Native feel. None of this existed: taps flashed a grey box, every control
+   carried the legacy 300ms double-tap delay, and scrolling a panel to its end
+   dragged the whole page with it. */
+button, a, [role="button"], input, select, textarea, label {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+button, [role="button"], nav { -webkit-user-select: none; user-select: none; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+.overflow-y-auto, .overflow-auto, [class*="overflow-y"] {
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Safe areas — index.html now carries viewport-fit=cover, which is what makes
+   these resolve to anything but zero. The floor matters as much as the inset:
+   iOS Safari defaults to a bottom address bar, and in that mode the inset is 0
+   while the page still sits hard against the status bar. */
+@media (max-width: 767px) {
+  .gl-safe-top { padding-top: max(env(safe-area-inset-top, 0px), 10px); }
+}
+
+/* This app styles almost everything inline, so the rules above lose to
+   element style attributes. These few need !important to land — used
+   deliberately and only where an inline value is actively harmful on a phone. */
+@media (max-width: 767px) {
+  /* The search field carries an inline font-size: 14px. Anything under 16px
+     makes iOS zoom the page the moment it is focused. */
+  input, select, textarea { font-size: 16px !important; }
+
+  /* Several panels carry inline pixel widths (600px, 450px) that are wider
+     than the screen, which is what pushed the document to 411px and made the
+     whole page pan sideways. */
+  div, section, header, footer, img, table, pre { max-width: 100%; }
+}
