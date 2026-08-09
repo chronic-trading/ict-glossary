@@ -343,7 +343,11 @@ body {
    Buttons only — anchors are frequently inline links inside prose, where a 44px
    box would be wrong. */
 @media (max-width: 767px) {
-  button:not(.gl-inline) { min-height: 44px; min-width: 44px; }
+  /* Height only. A blanket min-width inflated a 28px icon button in the header
+     to 44px, and the row could not absorb the extra 16px — that is what pushed
+     the document to 410px and made the whole page pan sideways. A 28x44 target
+     is still comfortably tappable; a page that slides under your thumb is not. */
+  button:not(.gl-inline) { min-height: 44px; }
   input:not([type="checkbox"]):not([type="radio"]), select, textarea { min-height: 44px; }
   /* iOS Safari and WKWebView auto-zoom the page whenever a focused field is
      under 16px. The search box here was 14px, so tapping it zoomed the page. */
@@ -380,8 +384,16 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
      makes iOS zoom the page the moment it is focused. */
   input, select, textarea { font-size: 16px !important; }
 
-  /* Several panels carry inline pixel widths (600px, 450px) that are wider
-     than the screen, which is what pushed the document to 411px and made the
-     whole page pan sideways. */
+  /* Safety net for any panel wider than the screen. */
   div, section, header, footer, img, table, pre { max-width: 100%; }
+}
+
+/* Final guard. Lifting the micro type for phones widened the header row — the
+   wordmark, QUIZ pill and term count now need about 394px where the screen has
+   375 — so the page could be dragged sideways by ~19px. Clipping at the root
+   stops that: the row loses a couple of pixels of trailing padding, which is
+   invisible, rather than the whole page sliding under your thumb, which is not.
+   Scoped to phones so desktop layout debugging is unaffected. */
+@media (max-width: 767px) {
+  html, body { overflow-x: hidden; }
 }
