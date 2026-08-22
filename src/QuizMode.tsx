@@ -93,7 +93,7 @@ export function QuizMode({ onClose }: { onClose: () => void }) {
           <div style={{ display:'flex', alignItems:'center', gap:10 }}>
             <span style={{ fontSize:11, fontWeight:900, color:catInk('#34d399'), fontVariantNumeric:'tabular-nums', display:'inline-flex', alignItems:'center', gap:4 }}><Check size={12} strokeWidth={3} /> {score}</span>
             {best > 0 && <span style={{ fontSize: 'var(--fs-tiny)', fontWeight:700, color:catInk('#f59e0b') }}>Best {best}/{ROUND_SIZE}</span>}
-            <button onClick={onClose} style={{ fontSize:12, fontWeight:700, color:'var(--gl-text-dim)', background:'var(--gl-border)', border:'1px solid var(--gl-border)', borderRadius:8, padding:'5px 12px', cursor:'pointer', display:'inline-flex', alignItems:'center', gap:5 }}>
+            <button onClick={onClose} style={{ fontSize:12, fontWeight:700, color:'var(--gl-text-dim)', background:'var(--gl-border)', border:'1px solid var(--gl-border)', borderRadius:2, padding:'5px 12px', cursor:'pointer', display:'inline-flex', alignItems:'center', gap:5 }}>
               <X size={12} strokeWidth={2.5} /> Close
             </button>
           </div>
@@ -115,10 +115,10 @@ export function QuizMode({ onClose }: { onClose: () => void }) {
             </p>
             {score >= best && score > 0 && <p style={{ fontSize:11, fontWeight:900, letterSpacing:'0.14em', color:catInk('#f59e0b'), textTransform:'uppercase', marginBottom:24, display:'flex', alignItems:'center', justifyContent:'center', gap:5 }}><Star size={11} strokeWidth={2} fill="currentColor" /> New best</p>}
             <div style={{ display:'flex', gap:10, justifyContent:'center', marginTop:24 }}>
-              <button onClick={restart} style={{ padding:'12px 28px', borderRadius:14, fontSize:13, fontWeight:900, background:'linear-gradient(135deg,#f59e0b,#d97706)', color:'#0a0800', border:'none', cursor:'pointer' }}>
+              <button onClick={restart} style={{ padding:'12px 28px', borderRadius:2, fontSize:13, fontWeight:900, background:'linear-gradient(135deg,#f59e0b,#d97706)', color:'#0a0800', border:'none', cursor:'pointer' }}>
                 ↺ Play again
               </button>
-              <button onClick={onClose} style={{ padding:'12px 24px', borderRadius:14, fontSize:13, fontWeight:700, background:'transparent', color:'var(--gl-text-dim)', border:'1px solid var(--gl-border-2)', cursor:'pointer' }}>
+              <button onClick={onClose} style={{ padding:'12px 24px', borderRadius:2, fontSize:13, fontWeight:700, background:'transparent', color:'var(--gl-text-dim)', border:'1px solid var(--gl-border-2)', cursor:'pointer' }}>
                 Back to glossary
               </button>
             </div>
@@ -126,7 +126,7 @@ export function QuizMode({ onClose }: { onClose: () => void }) {
         ) : (
           /* ── Question ── */
           <>
-            <div style={{ borderRadius:18, overflow:'hidden', border:`1px solid ${color}22`, background:`linear-gradient(160deg,${color}0a,rgba(4,4,8,1) 70%)`, marginBottom:16 }}>
+            <div style={{ borderRadius:2, overflow:'hidden', border:`1px solid ${color}22`, background:`linear-gradient(160deg,${color}0a,rgba(4,4,8,1) 70%)`, marginBottom:16 }}>
               {DiagramComp && <DiagramComp />}
             </div>
             <p style={{ textAlign:'center', fontSize:13, fontWeight:700, color:'var(--gl-text)', marginBottom:14 }}>
@@ -140,7 +140,7 @@ export function QuizMode({ onClose }: { onClose: () => void }) {
                 return (
                   <button key={opt.id} onClick={() => pick(opt.id)}
                     style={{
-                      padding:'13px 14px', borderRadius:13, textAlign:'left', cursor: picked ? 'default' : 'pointer',
+                      padding:'13px 14px', borderRadius:2, textAlign:'left', cursor: picked ? 'default' : 'pointer',
                       fontSize: 13, fontWeight:700, transition:'all 0.15s',
                       background: isCorrect ? 'rgba(52,211,153,0.12)' : isWrong ? 'rgba(248,113,113,0.12)' : 'var(--gl-surface-2)',
                       border: `1.5px solid ${isCorrect ? 'rgba(52,211,153,0.5)' : isWrong ? 'rgba(248,113,113,0.5)' : 'var(--gl-border)'}`,
@@ -156,12 +156,12 @@ export function QuizMode({ onClose }: { onClose: () => void }) {
 
             {picked && (
               <div style={{ marginTop:14 }}>
-                <div style={{ padding:'12px 14px', borderRadius:13, background:`${color}0a`, border:`1px solid ${color}22`, marginBottom:12 }}>
+                <div style={{ padding:'12px 14px', borderRadius:2, background:`${color}0a`, border:`1px solid ${color}22`, marginBottom:12 }}>
                   <p style={{ fontSize: 'var(--fs-tiny)', fontWeight:900, letterSpacing:'0.16em', textTransform:'uppercase', color, marginBottom:5 }}>{q.term.term}</p>
                   <p style={{ fontSize: 12, color:'var(--gl-text-dim)', lineHeight:1.6 }}>{q.term.definition}</p>
                 </div>
                 <button onClick={next}
-                  style={{ width:'100%', padding:'13px', borderRadius:14, fontSize:13, fontWeight:900, background:'linear-gradient(135deg,#f59e0b,#d97706)', color:'#0a0800', border:'none', cursor:'pointer' }}>
+                  style={{ width:'100%', padding:'13px', borderRadius:2, fontSize:13, fontWeight:900, background:'linear-gradient(135deg,#f59e0b,#d97706)', color:'#0a0800', border:'none', cursor:'pointer' }}>
                   {qi + 1 >= round.length ? 'See results →' : 'Next question →'}
                 </button>
               </div>

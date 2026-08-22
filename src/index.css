@@ -52,7 +52,7 @@ body {
 /* ── Scrollbar ───────────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(245,158,11,0.25); border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: rgba(245,158,11,0.25); border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(245,158,11,0.45); }
 
 /* ── Finishing touches — kept in sync with trading-lab / ict-replay ──────────── */
@@ -61,7 +61,7 @@ body {
 :focus-visible {
   outline: 2px solid #f59e0b;
   outline-offset: 2px;
-  border-radius: 6px;
+  border-radius: 2px;
 }
 :focus:not(:focus-visible) { outline: none; }
 

@@ -20,7 +20,7 @@ function ThemeToggle() {
   const { theme, toggle } = useTheme()
   return (
     <button onClick={toggle} title={theme === 'light' ? 'Switch to dark' : 'Switch to light'} aria-label="Toggle theme"
-      style={{ display:'flex', alignItems:'center', justifyContent:'center', width:28, height:28, borderRadius:7, cursor:'pointer',
+      style={{ display:'flex', alignItems:'center', justifyContent:'center', width:28, height:28, borderRadius:2, cursor:'pointer',
         background:'var(--gl-surface-2)', border:'1px solid var(--gl-border)', color:'var(--gl-text-dim)' }}>
       {theme === 'light' ? <Moon size={14} strokeWidth={2} /> : <Sun size={14} strokeWidth={2} />}
     </button>
@@ -137,14 +137,14 @@ function DailyTermBanner({ onSearch }: { onSearch: (q: string) => void }) {
   return (
     <div style={{ maxWidth: 1020, margin: '0 auto', padding: '0 20px 20px' }}>
       <div style={{
-        borderRadius: 20, overflow: 'hidden',
+        borderRadius:2, overflow: 'hidden',
         background: `linear-gradient(135deg, ${color}10 0%, var(--gl-surface) 50%)`,
         border: `1px solid ${color}30`,
         boxShadow: `0 0 40px ${color}10`,
       }}>
         <div style={{ padding: '16px 20px 0', display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 'var(--fs-micro)', fontWeight: 900, letterSpacing: '0.22em', textTransform: 'uppercase', padding: '3px 10px', borderRadius: 7, background: `${color}18`, color, border: `1px solid ${color}28`, display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+            <span style={{ fontSize: 'var(--fs-micro)', fontWeight: 900, letterSpacing: '0.22em', textTransform: 'uppercase', padding: '3px 10px', borderRadius:2, background: `${color}18`, color, border: `1px solid ${color}28`, display: 'inline-flex', alignItems: 'center', gap: 5 }}>
               <Sparkles size={10} strokeWidth={2.5} /> Term of the Day
             </span>
             <span style={{ fontSize: 'var(--fs-tiny)', color: 'var(--gl-text-faint)', fontWeight: 600 }}>
@@ -153,7 +153,7 @@ function DailyTermBanner({ onSearch }: { onSearch: (q: string) => void }) {
           </div>
           <button
             onClick={() => onSearch(term.term)}
-            style={{ fontSize: 'var(--fs-tiny)', fontWeight: 700, color, background: 'none', border: `1px solid ${color}28`, borderRadius: 8, padding: '4px 12px', cursor: 'pointer', transition: 'all 0.15s' }}
+            style={{ fontSize: 'var(--fs-tiny)', fontWeight: 700, color, background: 'none', border: `1px solid ${color}28`, borderRadius:2, padding: '4px 12px', cursor: 'pointer', transition: 'all 0.15s' }}
             onMouseEnter={e => (e.currentTarget.style.background = `${color}14`)}
             onMouseLeave={e => (e.currentTarget.style.background = 'none')}
           >
@@ -166,7 +166,7 @@ function DailyTermBanner({ onSearch }: { onSearch: (q: string) => void }) {
           <div style={{ padding: '16px 20px 20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
               <h3 style={{ fontSize: 20, fontWeight: 900, color: 'var(--gl-text)', letterSpacing: '-0.5px' }}>{term.term}</h3>
-              {term.abbr && <span style={{ fontSize: 'var(--fs-micro)', fontWeight: 900, letterSpacing: '0.14em', padding: '3px 8px', borderRadius: 7, background: `${color}16`, color, border: `1px solid ${color}30` }}>{term.abbr}</span>}
+              {term.abbr && <span style={{ fontSize: 'var(--fs-micro)', fontWeight: 900, letterSpacing: '0.14em', padding: '3px 8px', borderRadius:2, background: `${color}16`, color, border: `1px solid ${color}30` }}>{term.abbr}</span>}
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 12 }}>
               <span style={{ width: 5, height: 5, borderRadius: '50%', background: color, boxShadow: `0 0 6px ${color}`, display: 'inline-block' }}/>
@@ -181,7 +181,7 @@ function DailyTermBanner({ onSearch }: { onSearch: (q: string) => void }) {
               </button>
             )}
             {expanded && term.example && (
-              <div style={{ marginTop: 12, padding: '10px 12px', borderRadius: 12, background: `${color}08`, border: `1px solid ${color}18`, fontSize: 12, color: 'var(--gl-text-dim)', lineHeight: 1.65 }}>
+              <div style={{ marginTop: 12, padding: '10px 12px', borderRadius:2, background: `${color}08`, border: `1px solid ${color}18`, fontSize: 12, color: 'var(--gl-text-dim)', lineHeight: 1.65 }}>
                 <span style={{ display: 'block', fontSize: 'var(--fs-tiny)', fontWeight: 900, letterSpacing: '0.18em', textTransform: 'uppercase', color, marginBottom: 6 }}>Example</span>
                 {term.example}
               </div>
@@ -236,13 +236,13 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
     if (!highlight || highlight.length < 2) return <>{text}</>
     const parts = text.split(new RegExp(`(${highlight.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'))
     return <>{parts.map((p,i) => p.toLowerCase()===highlight.toLowerCase()
-      ? <mark key={i} style={{ background:`${color}28`, color, borderRadius:'3px', padding:'0 2px', fontWeight:700 }}>{p}</mark>
+      ? <mark key={i} style={{ background:`${color}28`, color, borderRadius:'2px', padding:'0 2px', fontWeight:700 }}>{p}</mark>
       : p)}</>
   }
 
   return (
     <div className="gcard" id={`term-${term.id}`} style={{
-      '--accent': color, borderRadius:18, overflow:'hidden',
+      '--accent': color, borderRadius:2, overflow:'hidden',
       background: learned ? `var(--gl-surface)` : 'var(--gl-surface)',
       borderTop:`1px solid ${color}22`, borderRight:`1px solid ${color}10`,
       borderBottom:`1px solid ${learned ? color+'35' : color+'10'}`,
@@ -257,8 +257,8 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
       {/* Diagram */}
       <div className="diagram-frame" style={{ background:`linear-gradient(160deg,${color}0e 0%,${color}03 50%,rgba(4,4,8,1) 80%)`, borderBottom:`1px solid ${color}14`, position:'relative' }}>
         <div style={{ position:'absolute', top:8, right:8, zIndex:3, display:'flex', gap:5, alignItems:'center' }}>
-          {learned && <span style={{ fontSize: 'var(--fs-tiny)', background:'rgba(52,211,153,0.15)', color:catInk('#34d399'), border:'1px solid rgba(52,211,153,0.3)', borderRadius:5, padding:'2px 6px', fontWeight:900, letterSpacing:'0.1em', display:'inline-flex', alignItems:'center', gap:4 }}><Check size={11} strokeWidth={3} /> LEARNED</span>}
-          <span style={{ fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.14em', padding:'3px 7px', borderRadius:6, background:`${color}14`, color, border:`1px solid ${color}28`, textTransform:'uppercase' }}>
+          {learned && <span style={{ fontSize: 'var(--fs-tiny)', background:'rgba(52,211,153,0.15)', color:catInk('#34d399'), border:'1px solid rgba(52,211,153,0.3)', borderRadius:2, padding:'2px 6px', fontWeight:900, letterSpacing:'0.1em', display:'inline-flex', alignItems:'center', gap:4 }}><Check size={11} strokeWidth={3} /> LEARNED</span>}
+          <span style={{ fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.14em', padding:'3px 7px', borderRadius:2, background:`${color}14`, color, border:`1px solid ${color}28`, textTransform:'uppercase' }}>
             {CAT_SHORT[term.category]}
           </span>
         </div>
@@ -273,12 +273,12 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
         <div style={{ display:'flex', alignItems:'flex-start', gap:8, marginBottom:6 }}>
           <h3 style={{ fontSize:14, fontWeight:900, color:'var(--gl-text)', lineHeight:1.2, flex:1, letterSpacing:'-0.2px' }}>{term.term}</h3>
           <div style={{ display:'flex', alignItems:'center', gap:5, flexShrink:0 }}>
-            {term.abbr && <span style={{ fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.14em', padding:'3px 8px', borderRadius:7, background:`${color}16`, color, border:`1px solid ${color}30` }}>{term.abbr}</span>}
+            {term.abbr && <span style={{ fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.14em', padding:'3px 8px', borderRadius:2, background:`${color}16`, color, border:`1px solid ${color}30` }}>{term.abbr}</span>}
             {/* Copy shareable link */}
             <button
               onClick={copyLink}
               title={copied ? 'Link copied!' : 'Copy link to this term'}
-              style={{ display:'flex', alignItems:'center', background:'none', border:'none', cursor:'pointer', padding:'3px', borderRadius:6, lineHeight:1, opacity: copied ? 1 : 0.3, transition:'opacity 0.2s, transform 0.15s', color: copied ? '#34d399' : 'var(--gl-text-dim)' }}
+              style={{ display:'flex', alignItems:'center', background:'none', border:'none', cursor:'pointer', padding:'3px', borderRadius:2, lineHeight:1, opacity: copied ? 1 : 0.3, transition:'opacity 0.2s, transform 0.15s', color: copied ? '#34d399' : 'var(--gl-text-dim)' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity='1'; (e.currentTarget as HTMLElement).style.transform='scale(1.15)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity=copied?'1':'0.3'; (e.currentTarget as HTMLElement).style.transform='scale(1)' }}
             >
@@ -288,7 +288,7 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
             <button
               onClick={e => { e.stopPropagation(); onToggleLearned(term.id) }}
               title={learned ? 'Mark as unlearned' : 'Mark as learned'}
-              style={{ display:'flex', alignItems:'center', background:'none', border:'none', cursor:'pointer', padding:'3px', borderRadius:6, lineHeight:1, opacity: learned ? 1 : 0.25, transition:'opacity 0.2s, transform 0.15s', color: learned ? '#34d399' : 'rgba(148,163,184,0.6)' }}
+              style={{ display:'flex', alignItems:'center', background:'none', border:'none', cursor:'pointer', padding:'3px', borderRadius:2, lineHeight:1, opacity: learned ? 1 : 0.25, transition:'opacity 0.2s, transform 0.15s', color: learned ? '#34d399' : 'rgba(148,163,184,0.6)' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity='1'; (e.currentTarget as HTMLElement).style.transform='scale(1.2)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity=learned?'1':'0.25'; (e.currentTarget as HTMLElement).style.transform='scale(1)' }}
             >
@@ -316,7 +316,7 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
         {expanded && (
           <div className="expand-content" style={{ marginTop:12, borderTop:`1px solid ${color}14`, paddingTop:12 }}>
             {term.example && (
-              <div style={{ padding:'10px 12px', borderRadius:12, marginBottom:10, background:`${color}08`, border:`1px solid ${color}18`, fontSize: 12, color:'var(--gl-text-dim)', lineHeight:1.65 }}>
+              <div style={{ padding:'10px 12px', borderRadius:2, marginBottom:10, background:`${color}08`, border:`1px solid ${color}18`, fontSize: 12, color:'var(--gl-text-dim)', lineHeight:1.65 }}>
                 <span style={{ display:'block', fontSize: 'var(--fs-tiny)', fontWeight:900, letterSpacing:'0.18em', textTransform:'uppercase', color, marginBottom:6 }}>Example</span>
                 {term.example}
               </div>
@@ -328,7 +328,7 @@ function TermCard({ term, onRelatedClick, highlight, learned, onToggleLearned, f
                   {term.related.map(r => (
                     <button key={r} className="related-tag"
                       onClick={e => { e.stopPropagation(); onRelatedClick(r) }}
-                      style={{ padding:'5px 11px', borderRadius:9, fontSize:11, fontWeight:700, background:`${color}10`, color, border:`1px solid ${color}28`, cursor:'pointer', display:'flex', alignItems:'center', gap:4 }}>
+                      style={{ padding:'5px 11px', borderRadius:2, fontSize:11, fontWeight:700, background:`${color}10`, color, border:`1px solid ${color}28`, cursor:'pointer', display:'flex', alignItems:'center', gap:4 }}>
                       {r} <span style={{ fontSize: 'var(--fs-micro)' }}>→</span>
                     </button>
                   ))}
@@ -360,20 +360,20 @@ function CategoryCards({ onSelect, active }: { onSelect: (c: Category | null) =>
             const sample = TERMS.filter(t => t.category === cat).slice(0,3).map(t => t.abbr || t.term.split(' ')[0])
             return (
               <button key={cat} onClick={() => { onSelect(isActive ? null : cat); window.scrollTo({ top:0, behavior:'smooth' }) }}
-                style={{ '--accent':color, borderRadius:18, padding:'22px 20px', textAlign:'left', cursor:'pointer', background:isActive?`${color}14`:'var(--gl-surface)', border:`1px solid ${isActive?color+'45':color+'18'}`, boxShadow:isActive?`0 0 32px ${color}18`:'none', transition:'all 0.2s ease', position:'relative', overflow:'hidden' } as React.CSSProperties}
+                style={{ '--accent':color, borderRadius:2, padding:'22px 20px', textAlign:'left', cursor:'pointer', background:isActive?`${color}14`:'var(--gl-surface)', border:`1px solid ${isActive?color+'45':color+'18'}`, boxShadow:isActive?`0 0 32px ${color}18`:'none', transition:'all 0.2s ease', position:'relative', overflow:'hidden' } as React.CSSProperties}
                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform='translateY(-2px)'; (e.currentTarget as HTMLElement).style.boxShadow=`0 12px 40px ${color}18, 0 0 0 1px ${color}30` }}
                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform=''; (e.currentTarget as HTMLElement).style.boxShadow=isActive?`0 0 32px ${color}18`:'' }}>
                 <div style={{ position:'absolute', top:0, left:0, right:0, height:1, background:`linear-gradient(90deg,transparent,${color},transparent)`, opacity:0.6 }}/>
                 <div style={{ position:'absolute', right:12, top:10, opacity:0.06, pointerEvents:'none', color }}><CatIcon cat={cat} size={42} /></div>
                 <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:12 }}>
-                  <div style={{ width:36, height:36, borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', color, background:`${color}15`, border:`1px solid ${color}28`, flexShrink:0 }}><CatIcon cat={cat} size={18} /></div>
+                  <div style={{ width:36, height:36, borderRadius:2, display:'flex', alignItems:'center', justifyContent:'center', color, background:`${color}15`, border:`1px solid ${color}28`, flexShrink:0 }}><CatIcon cat={cat} size={18} /></div>
                   <div>
                     <p style={{ fontSize:13, fontWeight:900, color:'var(--gl-text)', lineHeight:1.2 }}>{cat}</p>
                     <p style={{ fontSize: 'var(--fs-tiny)', color, fontWeight:700 }}>{count} concepts</p>
                   </div>
                 </div>
                 <div style={{ display:'flex', flexWrap:'wrap', gap:5 }}>
-                  {sample.map(s => <span key={s} style={{ fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.1em', padding:'3px 8px', borderRadius:6, background:`${color}10`, color, border:`1px solid ${color}20` }}>{s}</span>)}
+                  {sample.map(s => <span key={s} style={{ fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.1em', padding:'3px 8px', borderRadius:2, background:`${color}10`, color, border:`1px solid ${color}20` }}>{s}</span>)}
                   <span style={{ fontSize: 'var(--fs-micro)', color, padding:'3px 0', display:'flex', alignItems:'center' }}>+{count-3} more →</span>
                 </div>
               </button>
@@ -514,7 +514,7 @@ export default function App() {
         <Ticker />
         <div style={{ maxWidth:1020, margin:'0 auto', padding:'0 20px', height:50, display:'flex', alignItems:'center', justifyContent:'space-between' }}>
           <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-            <div style={{ width:30, height:30, borderRadius:9, display:'flex', alignItems:'center', justifyContent:'center', color:catInk('#f59e0b'), background:'rgba(245,158,11,0.12)', border:'1px solid rgba(245,158,11,0.28)', boxShadow:'0 0 12px rgba(245,158,11,0.12)' }}><BookOpen size={15} strokeWidth={2} /></div>
+            <div style={{ width:30, height:30, borderRadius:2, display:'flex', alignItems:'center', justifyContent:'center', color:catInk('#f59e0b'), background:'rgba(245,158,11,0.12)', border:'1px solid rgba(245,158,11,0.28)', boxShadow:'0 0 12px rgba(245,158,11,0.12)' }}><BookOpen size={15} strokeWidth={2} /></div>
             <div style={{ display:'flex', alignItems:'baseline', gap:7 }}>
               <span style={{ fontSize:12, fontWeight:900, letterSpacing:'0.2em', color:'var(--gl-text)' }}>ICT GLOSSARY</span>
               <span style={{ fontSize: 'var(--fs-micro)', fontWeight:700, letterSpacing:'0.12em', textTransform:'uppercase', color:'var(--gl-text-faint)' }}>by Chronic Trading</span>
@@ -531,18 +531,18 @@ export default function App() {
             )}
             <div style={{ width:1, height:14, background:'var(--gl-border)' }}/>
             <button onClick={() => setQuizOpen(true)}
-              style={{ fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.1em', padding:'4px 10px', borderRadius:7, background:'rgba(245,158,11,0.1)', color:catInk('#f59e0b'), border:'1px solid rgba(245,158,11,0.25)', cursor:'pointer', transition:'all 0.15s', display:'inline-flex', alignItems:'center', gap:5 }}
+              style={{ fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.1em', padding:'4px 10px', borderRadius:2, background:'rgba(245,158,11,0.1)', color:catInk('#f59e0b'), border:'1px solid rgba(245,158,11,0.25)', cursor:'pointer', transition:'all 0.15s', display:'inline-flex', alignItems:'center', gap:5 }}
               onMouseEnter={e => (e.currentTarget.style.background='rgba(245,158,11,0.18)')}
               onMouseLeave={e => (e.currentTarget.style.background='rgba(245,158,11,0.1)')}>
               <Zap size={11} strokeWidth={2.5} /> QUIZ
             </button>
             {signedIn && (
-              <div title="Signed in — your learned terms sync across your Chronic Trading account" style={{ display:'flex', alignItems:'center', gap:4, fontSize: 'var(--fs-micro)', fontWeight:800, letterSpacing:'0.06em', padding:'4px 8px', borderRadius:7, background:'rgba(52,211,153,0.08)', color:catInk('#34d399'), border:'1px solid rgba(52,211,153,0.22)' }}>
+              <div title="Signed in — your learned terms sync across your Chronic Trading account" style={{ display:'flex', alignItems:'center', gap:4, fontSize: 'var(--fs-micro)', fontWeight:800, letterSpacing:'0.06em', padding:'4px 8px', borderRadius:2, background:'rgba(52,211,153,0.08)', color:catInk('#34d399'), border:'1px solid rgba(52,211,153,0.22)' }}>
                 <span style={{ width:5, height:5, borderRadius:'50%', background:'#34d399', boxShadow:'0 0 6px #34d399' }}/>
                 Synced
               </div>
             )}
-            <div style={{ fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.1em', padding:'4px 9px', borderRadius:7, background:'rgba(52,211,153,0.1)', color:catInk('#34d399'), border:'1px solid rgba(52,211,153,0.22)' }}>
+            <div style={{ fontSize: 'var(--fs-micro)', fontWeight:900, letterSpacing:'0.1em', padding:'4px 9px', borderRadius:2, background:'rgba(52,211,153,0.1)', color:catInk('#34d399'), border:'1px solid rgba(52,211,153,0.22)' }}>
               {TERMS.length} terms
             </div>
             <ThemeToggle />
@@ -575,7 +575,7 @@ export default function App() {
         </div>
 
         <div style={{ position:'relative', zIndex:2, maxWidth:740, margin:'0 auto' }}>
-          <div className="animate-glow" style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'6px 16px', borderRadius:999, border:'1px solid rgba(245,158,11,0.28)', background:'rgba(245,158,11,0.07)', marginBottom:22 }}>
+          <div className="animate-glow" style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'6px 16px', borderRadius:2, border:'1px solid rgba(245,158,11,0.28)', background:'rgba(245,158,11,0.07)', marginBottom:22 }}>
             <span style={{ width:6, height:6, borderRadius:'50%', background:'#f59e0b', boxShadow:'0 0 8px #f59e0b,0 0 16px #f59e0b60', display:'inline-block' }}/>
             <span style={{ fontSize: 'var(--fs-tiny)', fontWeight:900, letterSpacing:'0.22em', textTransform:'uppercase', color:catInk('#f59e0b') }}>
               {TERMS.length} Concepts · Every one visualised
@@ -600,13 +600,13 @@ export default function App() {
             <input ref={searchRef} className="search-input" value={query}
               onChange={e => { setQuery(e.target.value); setActiveLetter(null) }}
               placeholder="Search terms, abbreviations, definitions…"
-              style={{ width:'100%', padding:'15px 44px 15px 46px', borderRadius:16, fontSize:14, color:'var(--gl-text)', background:query?'var(--gl-surface)':'var(--gl-surface)', border:`1.5px solid ${query?'rgba(245,158,11,0.5)':'var(--gl-border)'}`, boxShadow:query?'0 0 0 3px rgba(245,158,11,0.08),0 8px 32px rgba(0,0,0,0.5)':'0 4px 24px rgba(0,0,0,0.35)', outline:'none', transition:'all 0.22s', boxSizing:'border-box' }}
+              style={{ width:'100%', padding:'15px 44px 15px 46px', borderRadius:2, fontSize:14, color:'var(--gl-text)', background:query?'var(--gl-surface)':'var(--gl-surface)', border:`1.5px solid ${query?'rgba(245,158,11,0.5)':'var(--gl-border)'}`, boxShadow:query?'0 0 0 3px rgba(245,158,11,0.08),0 8px 32px rgba(0,0,0,0.5)':'0 4px 24px rgba(0,0,0,0.35)', outline:'none', transition:'all 0.22s', boxSizing:'border-box' }}
               autoComplete="off" spellCheck={false}
             />
             {query && <button onClick={() => setQuery('')} style={{ position:'absolute', right:14, top:'50%', transform:'translateY(-50%)', color:'var(--gl-text-faint)', background:'none', border:'none', cursor:'pointer', fontSize:20, lineHeight:1 }}>×</button>}
           </div>
           <p style={{ fontSize: 'var(--fs-tiny)', color:'var(--gl-text-faint)', fontWeight:600, letterSpacing:'0.08em' }}>
-            Press <kbd style={{ padding:'2px 6px', borderRadius:4, background:'var(--gl-border)', border:'1px solid var(--gl-border)', fontSize: 'var(--fs-micro)', fontFamily:'monospace' }}>/</kbd> to focus · <kbd style={{ padding:'2px 6px', borderRadius:4, background:'var(--gl-border)', border:'1px solid var(--gl-border)', fontSize: 'var(--fs-micro)', fontFamily:'monospace' }}>Esc</kbd> to clear
+            Press <kbd style={{ padding:'2px 6px', borderRadius:2, background:'var(--gl-border)', border:'1px solid var(--gl-border)', fontSize: 'var(--fs-micro)', fontFamily:'monospace' }}>/</kbd> to focus · <kbd style={{ padding:'2px 6px', borderRadius:2, background:'var(--gl-border)', border:'1px solid var(--gl-border)', fontSize: 'var(--fs-micro)', fontFamily:'monospace' }}>Esc</kbd> to clear
           </p>
 
           {/* Quick stats */}
@@ -637,14 +637,14 @@ export default function App() {
         <div style={{ maxWidth:1020, margin:'0 auto' }}>
           <div style={{ display:'flex', flexWrap:'wrap', gap:6, justifyContent:'center' }}>
             <button className="cat-pill" onClick={() => setActiveCategory(null)}
-              style={{ padding:'6px 14px', borderRadius:11, fontSize: 'var(--fs-tiny)', fontWeight:900, letterSpacing:'0.06em', cursor:'pointer', border:`1.5px solid ${!activeCategory?'rgba(245,158,11,0.5)':'var(--gl-border)'}`, background:!activeCategory?'rgba(245,158,11,0.13)':'var(--gl-surface-2)', color:!activeCategory?catInk('#f59e0b'):'var(--gl-text-faint)', boxShadow:!activeCategory?'0 0 16px rgba(245,158,11,0.14)':'none', transition:'all 0.18s' }}>
+              style={{ padding:'6px 14px', borderRadius:2, fontSize: 'var(--fs-tiny)', fontWeight:900, letterSpacing:'0.06em', cursor:'pointer', border:`1.5px solid ${!activeCategory?'rgba(245,158,11,0.5)':'var(--gl-border)'}`, background:!activeCategory?'rgba(245,158,11,0.13)':'var(--gl-surface-2)', color:!activeCategory?catInk('#f59e0b'):'var(--gl-text-faint)', boxShadow:!activeCategory?'0 0 16px rgba(245,158,11,0.14)':'none', transition:'all 0.18s' }}>
               All {TERMS.length}
             </button>
             {CATEGORIES.map(cat => {
               const color=catInk(CATEGORY_COLORS[cat]), count=TERMS.filter(t=>t.category===cat).length, active=activeCategory===cat
               return (
                 <button key={cat} className="cat-pill" onClick={() => setActiveCategory(active?null:cat)}
-                  style={{ padding:'6px 13px', borderRadius:11, fontSize: 'var(--fs-tiny)', fontWeight:900, letterSpacing:'0.06em', cursor:'pointer', border:`1.5px solid ${active?color+'50':'var(--gl-border)'}`, background:active?`${color}17`:'var(--gl-surface-2)', color:active?color:'var(--gl-text-faint)', boxShadow:active?`0 0 18px ${color}18`:'none', transition:'all 0.18s', display:'flex', alignItems:'center', gap:5 }}>
+                  style={{ padding:'6px 13px', borderRadius:2, fontSize: 'var(--fs-tiny)', fontWeight:900, letterSpacing:'0.06em', cursor:'pointer', border:`1.5px solid ${active?color+'50':'var(--gl-border)'}`, background:active?`${color}17`:'var(--gl-surface-2)', color:active?color:'var(--gl-text-faint)', boxShadow:active?`0 0 18px ${color}18`:'none', transition:'all 0.18s', display:'flex', alignItems:'center', gap:5 }}>
                   <span style={{ width:5, height:5, borderRadius:'50%', background:color, opacity:active?1:0.5, display:'inline-block', boxShadow:active?`0 0 6px ${color}`:'none' }}/>
                   {cat} <span style={{ color:'var(--gl-text-dim)', fontSize: 'var(--fs-micro)' }}>{count}</span>
                 </button>
@@ -664,7 +664,7 @@ export default function App() {
               return (
                 <button key={letter} disabled={!has} className={has?'letter-btn':''}
                   onClick={() => setActiveLetter(active?null:letter)}
-                  style={{ width:28, height:28, borderRadius:8, fontSize: 'var(--fs-tiny)', fontWeight:900, cursor:has?'pointer':'default', border:active?'1.5px solid rgba(245,158,11,0.5)':has?'1px solid var(--gl-border)':'1px solid transparent', background:active?'rgba(245,158,11,0.14)':has?'var(--gl-surface-2)':'transparent', color:active?catInk('#f59e0b'):has?'var(--gl-text-dim)':'var(--gl-text-faint)', boxShadow:active?'0 0 12px rgba(245,158,11,0.18)':'none', transition:'all 0.14s' }}>
+                  style={{ width:28, height:28, borderRadius:2, fontSize: 'var(--fs-tiny)', fontWeight:900, cursor:has?'pointer':'default', border:active?'1.5px solid rgba(245,158,11,0.5)':has?'1px solid var(--gl-border)':'1px solid transparent', background:active?'rgba(245,158,11,0.14)':has?'var(--gl-surface-2)':'transparent', color:active?catInk('#f59e0b'):has?'var(--gl-text-dim)':'var(--gl-text-faint)', boxShadow:active?'0 0 12px rgba(245,158,11,0.18)':'none', transition:'all 0.14s' }}>
                   {letter}
                 </button>
               )
@@ -683,7 +683,7 @@ export default function App() {
             {activeCategory && <><span style={{ opacity:0.4 }}> · </span><span style={{ color:CATEGORY_COLORS[activeCategory] }}>{activeCategory}</span></>}
           </p>
           {hasFilter && (
-            <button onClick={clearFilters} style={{ fontSize: 'var(--fs-tiny)', fontWeight:700, color:'var(--gl-text-faint)', background:'none', border:'1px solid var(--gl-border)', cursor:'pointer', padding:'4px 10px', borderRadius:8, transition:'all 0.15s' }}
+            <button onClick={clearFilters} style={{ fontSize: 'var(--fs-tiny)', fontWeight:700, color:'var(--gl-text-faint)', background:'none', border:'1px solid var(--gl-border)', cursor:'pointer', padding:'4px 10px', borderRadius:2, transition:'all 0.15s' }}
               onMouseEnter={e => (e.currentTarget.style.color='var(--gl-text-dim)')}
               onMouseLeave={e => (e.currentTarget.style.color='var(--gl-text-faint)')}
             >Clear ×</button>
@@ -734,7 +734,7 @@ export default function App() {
             ].map(s => {
               const Ic = s.icon
               return (
-              <div key={s.label} className="stat-card" style={{ '--accent':s.color, borderRadius:16, padding:'18px 12px', textAlign:'center', background:'var(--gl-surface)', border:`1px solid ${s.color}18`, position:'relative', overflow:'hidden' } as React.CSSProperties}>
+              <div key={s.label} className="stat-card" style={{ '--accent':s.color, borderRadius:2, padding:'18px 12px', textAlign:'center', background:'var(--gl-surface)', border:`1px solid ${s.color}18`, position:'relative', overflow:'hidden' } as React.CSSProperties}>
                 <div style={{ position:'absolute', inset:0, background:`radial-gradient(ellipse 80% 60% at 50% 0%,${s.color}0c,transparent 70%)`, pointerEvents:'none' }}/>
                 <div style={{ position:'relative', zIndex:1 }}>
                   <div style={{ marginBottom:6, color:s.color, display:'flex', justifyContent:'center' }}><Ic size={18} strokeWidth={1.75} /></div>
@@ -762,13 +762,13 @@ export default function App() {
               { label:'Entry',   c:'#c084fc' },{label:'→',c:'var(--gl-text-faint)'},
               { label:'Target',  c:'#14b8a6' },
             ].map((step,i) => (
-              <span key={i} style={{ fontSize:step.label==='→'?14:11, fontWeight:step.label==='→'?400:900, color:catInk(step.c), padding:step.label==='→'?'0 4px':'6px 12px', borderRadius:step.label==='→'?0:9, background:step.label==='→'?'none':`${step.c}12`, border:step.label==='→'?'none':`1px solid ${step.c}25`, letterSpacing:'0.06em' }}>
+              <span key={i} style={{ fontSize:step.label==='→'?14:11, fontWeight:step.label==='→'?400:900, color:catInk(step.c), padding:step.label==='→'?'0 4px':'6px 12px', borderRadius:step.label==='→'?0:2, background:step.label==='→'?'none':`${step.c}12`, border:step.label==='→'?'none':`1px solid ${step.c}25`, letterSpacing:'0.06em' }}>
                 {step.label}
               </span>
             ))}
           </div>
           <p style={{ textAlign:'center', fontSize:11, color:'var(--gl-text-faint)', marginTop:12, lineHeight:1.7 }}>
-            Click <kbd style={{ padding:'2px 6px', borderRadius:4, background:'var(--gl-border)', border:'1px solid var(--gl-border)', fontSize: 'var(--fs-micro)' }}>/</kbd> and type any step above to explore it.
+            Click <kbd style={{ padding:'2px 6px', borderRadius:2, background:'var(--gl-border)', border:'1px solid var(--gl-border)', fontSize: 'var(--fs-micro)' }}>/</kbd> and type any step above to explore it.
           </p>
         </div>
       </section>
@@ -777,7 +777,7 @@ export default function App() {
       <footer style={{ borderTop:'1px solid var(--gl-surface-2)', padding:'28px 20px 40px', position:'relative', zIndex:1 }}>
         <div style={{ maxWidth:1020, margin:'0 auto', display:'flex', flexDirection:'column', alignItems:'center', gap:12 }}>
           <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-            <div style={{ width:24, height:24, borderRadius:7, display:'flex', alignItems:'center', justifyContent:'center', color:catInk('#f59e0b'), background:'rgba(245,158,11,0.1)', border:'1px solid rgba(245,158,11,0.2)' }}><BookOpen size={12} strokeWidth={2} /></div>
+            <div style={{ width:24, height:24, borderRadius:2, display:'flex', alignItems:'center', justifyContent:'center', color:catInk('#f59e0b'), background:'rgba(245,158,11,0.1)', border:'1px solid rgba(245,158,11,0.2)' }}><BookOpen size={12} strokeWidth={2} /></div>
             <span style={{ fontSize:11, fontWeight:900, letterSpacing:'0.18em', textTransform:'uppercase', color:'var(--gl-text-faint)' }}>ICT Glossary</span>
             <span style={{ width:3, height:3, borderRadius:'50%', background:'rgba(245,158,11,0.3)', display:'inline-block' }}/>
             <span style={{ fontSize: 'var(--fs-tiny)', fontWeight:700, color:'var(--gl-text-faint)' }}>a Chronic Trading tool</span>
