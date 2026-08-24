@@ -435,10 +435,16 @@ export default function App() {
     return () => window.removeEventListener('scroll', fn)
   }, [])
 
-  // URL deep link: ?t=term-id → filter to the term, scroll to it, flash it
+  // URL deep link. Two shapes reach this:
+  //   ?t=term-id   an in-app link (related terms, shares)
+  //   /t/term-id/  a prerendered page, which is how search traffic arrives
+  // Both land on the same single-page glossary, so without the path form a
+  // visitor who searched "what is a fair value gap" and clicked the result
+  // would get the full 121-term list with no sign of the one they asked for.
   useEffect(() => {
     const p = new URLSearchParams(window.location.search)
-    const termId = p.get('t')
+    const fromPath = window.location.pathname.match(new RegExp('/t/([a-z0-9-]+)/?$', 'i'))?.[1]
+    const termId = p.get('t') ?? fromPath ?? null
     if (termId) {
       const term = TERMS.find(t => t.id === termId)
       if (term) {

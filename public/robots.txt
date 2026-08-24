@@ -2,3 +2,8 @@ User-agent: *
 Allow: /
 
 Sitemap: https://chronic-trading.github.io/ict-glossary/sitemap.xml
+
+# sitemap.xml is generated at build time by scripts/prerender.mjs — one entry
+# per term plus the hub. There is deliberately no checked-in copy: a static file
+# here would look authoritative while silently going stale every time a term is
+# added.
